@@ -1,0 +1,33 @@
+{
+  "name": "ML::Clustering",
+  "description": "Package for clustering algorithms",
+  "version": "0.1.0",
+  "perl": "6.d",
+  "authors": [
+    "Anton Antonov"
+  ],
+  "auth": "zef:antononcube",
+  "depends": [
+    "Data::Reshapers:ver<0.1.9+>"
+  ],
+  "build-depends": [],
+  "test-depends": [],
+  "provides": {
+    "ML::Clustering": "lib/ML/Clustering.rakumod",
+    "ML::Clustering::DistanceFunctions": "lib/ML/Clustering/DistanceFunctions.rakumod",
+    "ML::Clustering::KMeans": "lib/ML/Clustering/KMeans.rakumod"
+  },
+  "resources": [
+  ],
+  "license": "Artistic-2.0",
+  "tags": [
+    "K-means",
+    "Bi-sectional K-means",
+    "clustering",
+    "clusters",
+    "ML",
+    "unsupervised"
+  ],
+  "api": "1",
+  "source-url": "https://github.com/antononcube/Raku-ML-Clustering.git"
+}
