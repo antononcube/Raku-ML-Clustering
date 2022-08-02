@@ -23,7 +23,7 @@ The data in the examples below is generated and manipulated with the packages
 [AA1].
 
 The plots are made with the package
-["Text::Plot"](https://raku.land/zef:antononcube/Text::Plot), [AAp7].
+["Text::Plot"](https://raku.land/zef:antononcube/Text::Plot), [AAp6].
 
 -------
 
@@ -60,14 +60,14 @@ records-summary(@data3)
 ```
 ```
 # +------------------------------+------------------------------+
-# | 0                            | 1                            |
+# | 1                            | 0                            |
 # +------------------------------+------------------------------+
-# | Min    => 1.576467507178093  | Min    => 2.5385827066299163 |
-# | 1st-Qu => 5.754466193787325  | 1st-Qu => 5.186823691927518  |
-# | Mean   => 8.164589167945715  | Mean   => 7.969649718947681  |
-# | Median => 9.349898866395668  | Median => 9.257552816955453  |
-# | 3rd-Qu => 10.388037918925953 | 3rd-Qu => 9.830426772889306  |
-# | Max    => 11.643508273865677 | Max    => 11.79652321366253  |
+# | Min    => 3.0083171759052374 | Min    => 2.99152954550737   |
+# | 1st-Qu => 5.3582006670159945 | 1st-Qu => 5.691479144933329  |
+# | Mean   => 7.988502686038186  | Mean   => 8.33540004626669   |
+# | Median => 9.128772007411778  | Median => 9.57282202992134   |
+# | 3rd-Qu => 10.097184372569952 | 3rd-Qu => 10.270801369302994 |
+# | Max    => 11.966371289590775 | Max    => 12.406483118865026 |
 # +------------------------------+------------------------------+
 ```
 
@@ -78,22 +78,22 @@ use Text::Plot;
 text-list-plot(@data3)
 ```
 ```
-# +-----+---------+---------+----------+---------+---------+-+       
-# +                                                          +  12.00
-# |                                      *     *    *  ***   |       
-# |                                       *  *  * *      *   |       
-# +                                  *   *  **** ****** *    +  10.00
-# |                                           * *** ***      |       
-# +                                            *        *    +   8.00
-# |               *                          *     *         |       
-# +     *           *                  *                     +   6.00
-# |            * **      *   * *                             |       
-# |     *       *       * * *                                |       
-# +   *         *        *  *  * *    *                      +   4.00
-# |                     *                                    |       
-# +                                                          +   2.00
-# +-----+---------+---------+----------+---------+---------+-+       
-#       2.00      4.00      6.00       8.00      10.00     12.00
+# +--------+----------+----------+----------+----------+-----+       
+# |                                                          |       
+# +                                     * *** ***            +  12.00
+# |                                   *     ** *   *  *  *   |       
+# +                               *     **********       *   +  10.00
+# |                               *        *** ***           |       
+# +                                   *      * *             +   8.00
+# |                                     *          *         |       
+# |      *       *                                           |       
+# +   *    * *      *     **                                 +   6.00
+# |      *     *  * *                                        |       
+# +   *  *   *  *** ** * *  *                                +   4.00
+# |                **         *                              |       
+# |                                                          |       
+# +--------+----------+----------+----------+----------+-----+       
+#          4.00       6.00       8.00       10.00      12.00
 ```
 
 **Problem:** Group the points in such a way that each group has close (or similar) points.
@@ -106,54 +106,55 @@ my %res = find-clusters(@data3, 2, prop => 'All');
 %res<Clusters>>>.elems
 ```
 ```
-# (30 50)
+# (50 30)
 ```
 
-Here is are sample points from each found cluster:
+**Remark:** The function `find-clusters` can return results of different types controlled with the named argument "prop".
+Using `prop => 'All'` returns a hash with all properties of the cluster finding result.
+
+Here are sample points from each found cluster:
 
 ```perl6
 .say for %res<Clusters>>>.pick(3);
 ```
 ```
-# ((6.831363773333723 3.842146135151861) (5.285284257308562 5.644048604339834) (5.9326801523932335 4.043689497333546))
-# ((9.3105222242724 7.547871752902891) (10.30094205389188 9.581911253052866) (10.68593050386624 9.236029625342653))
+# ((10.197782234303773 9.782034329953607) (12.406483118865026 10.81078915584907) (9.86594364573218 9.055658551283518))
+# ((6.793895295914484 5.994720108035477) (6.864989150334569 5.941695089848203) (3.678466387156798 6.503232710889149))
 ```
 
-Here are the centers of the clusters (mean points):
+Here are the centers of the clusters (the mean points):
 
 ```perl6
 %res<MeanPoints>
 ```
 ```
-# [(5.516303255404193 5.883704386734041) (10.201413094459095 9.892834500094127)]
+# [(9.795425221191257 9.464239286042913) (4.888221803779357 5.039431353925738)]
 ```
 
-We can verify the result by looking at the plot of found clusters:
+We can verify the result by looking at the plot of the found clusters:
 
 ```perl6
 text-list-plot((|%res<Clusters>, %res<MeanPoints>), point-char => <▽ ☐ ●>, title => '▽ - 1st cluster; ☐ - 2nd cluster; ● - cluster centers')
 ```
 ```
 # ▽ - 1st cluster; ☐ - 2nd cluster; ● - cluster centers    
-# +----+----------+----------+---------+----------+----------+       
-# +                                       ☐     ☐        ☐ ☐ +  12.00
-# |                                              ☐   ☐   ☐☐  |       
-# +                                        ☐  ☐☐ ☐☐☐ ☐    ☐☐ +  10.00
-# |                                  ☐    ☐  ☐☐ ☐☐☐●☐☐☐ ☐    |       
-# |                                            ☐        ☐    |       
-# +                                             ☐        ☐   +   8.00
-# |              ▽                            ☐     ☐        |       
-# +    ▽           ▽▽                   ▽                    +   6.00
-# |              ▽▽      ▽●  ▽  ▽                            |       
-# |    ▽       ▽▽       ▽   ▽                                |       
-# +  ▽         ▽▽        ▽▽ ▽   ▽▽     ▽                     +   4.00
-# |                     ▽                                    |       
-# +                     ▽                                    +   2.00
-# +----+----------+----------+---------+----------+----------+       
-#      2.00       4.00       6.00      8.00       10.00
+# +-------+-----------+----------+-----------+----------+----+       
+# +                                      ▽▽     ▽            +  12.00
+# |                                         ▽▽▽  ▽           |       
+# |                                   ▽  ▽  ▽ ▽▽    ▽  ▽   ▽ |       
+# +                               ▽      ▽▽▽●▽▽▽▽▽▽        ▽ +  10.00
+# |                               ▽         ▽▽▽▽ ▽▽          |       
+# +                                    ▽     ▽  ▽            +   8.00
+# |                                      ▽          ▽        |       
+# |     ☐       ☐                                            |       
+# +  ☐    ☐ ☐       ☐     ☐☐                                 +   6.00
+# |     ☐   ☐ ☐●   ☐      ☐                                  |       
+# | ☐       ☐  ☐☐☐☐☐   ☐    ☐                                |       
+# +     ☐         ☐ ☐    ☐                                   +   4.00
+# |                           ☐                              |       
+# +-------+-----------+----------+-----------+----------+----+       
+#         4.00        6.00       8.00        10.00      12.00
 ```
-
-The function `find-clusters` can return results of different types controlled with the named argument "prop".
 
 **Remark:** By default `find-clusters` uses the K-means algorithm. The functions `k-means` and `k-mediods`
 call `find-clusters` with the option settings `method=>'K-means'` and `method=>'K-mediods'` respectively.
@@ -195,6 +196,18 @@ but I have not found to be necessary. (At this point of development.)
 
 -------
 
+## TODO
+
+- [ ] Implement Bi-sectional K-means algorithm, [AAp1].
+
+- [ ] Implement K-medoids algorithm.
+
+- [ ] Automatic determination of the number of clusters.
+
+- [ ] Implement Agglomerate algorithm.
+
+-------
+
 ## References
 
 ### Articles
@@ -209,41 +222,31 @@ but I have not found to be necessary. (At this point of development.)
 ### Packages
 
 [AAp1] Anton Antonov,
-[Implementation of the Apriori algorithm in Mathematica](https://github.com/antononcube/MathematicaForPrediction/blob/master/AprioriAlgorithm.m),
-(2014-2016),
-[MathematicaForPrediction at GitHub/antononcube](https://github.com/antononcube/MathematicaForPrediction/).
-
-[AAp1a] Anton Antonov
-[Implementation of the Apriori algorithm via Tries in Mathematica](https://github.com/antononcube/MathematicaForPrediction/blob/master/Misc/AprioriAlgorithmViaTries.m),
-(2022),
+[Bi-sectional K-means algorithm in Mathematica](https://github.com/antononcube/MathematicaForPrediction/blob/master/BiSectionalKMeans.m),
+(2020),
 [MathematicaForPrediction at GitHub/antononcube](https://github.com/antononcube/MathematicaForPrediction/).
 
 [AAp2] Anton Antonov,
-[Implementation of the Eclat algorithm in Mathematica](https://github.com/antononcube/MathematicaForPrediction/blob/master/EclatAlgorithm.m),
-(2022),
-[MathematicaForPrediction at GitHub/antononcube](https://github.com/antononcube/MathematicaForPrediction/).
-
-[AAp3] Anton Antonov,
 [Data::Generators Raku package](https://github.com/antononcube/Raku-Data-Generators),
 (2021),
 [GitHub/antononcube](https://github.com/antononcube).
 
-[AAp4] Anton Antonov,
+[AAp3] Anton Antonov,
 [Data::Reshapers Raku package](https://github.com/antononcube/Raku-Data-Reshapers),
 (2021),
 [GitHub/antononcube](https://github.com/antononcube).
 
-[AAp5] Anton Antonov,
+[AAp4] Anton Antonov,
 [Data::Summarizers Raku package](https://github.com/antononcube/Raku-Data-Summarizers),
 (2021),
 [GitHub/antononcube](https://github.com/antononcube).
 
-[AAp6] Anton Antonov,
+[AAp5] Anton Antonov,
 [UML::Translators Raku package](https://github.com/antononcube/Raku-UML-Translators),
 (2022),
 [GitHub/antononcube](https://github.com/antononcube).
 
-[AAp7] Anton Antonov,
+[AAp6] Anton Antonov,
 [Text::Plot Raku package](https://raku.land/zef:antononcube/Text::Plot),
 (2022),
 [GitHub/antononcube](https://github.com/antononcube).

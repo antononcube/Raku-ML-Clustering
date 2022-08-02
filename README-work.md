@@ -23,7 +23,7 @@ The data in the examples below is generated and manipulated with the packages
 [AA1].
 
 The plots are made with the package
-["Text::Plot"](https://raku.land/zef:antononcube/Text::Plot), [AAp7].
+["Text::Plot"](https://raku.land/zef:antononcube/Text::Plot), [AAp6].
 
 -------
 
@@ -76,25 +76,26 @@ my %res = find-clusters(@data3, 2, prop => 'All');
 %res<Clusters>>>.elems
 ```
 
-Here is are sample points from each found cluster:
+**Remark:** The function `find-clusters` can return results of different types controlled with the named argument "prop".
+Using `prop => 'All'` returns a hash with all properties of the cluster finding result.
+
+Here are sample points from each found cluster:
 
 ```perl6
 .say for %res<Clusters>>>.pick(3);
 ```
 
-Here are the centers of the clusters (mean points):
+Here are the centers of the clusters (the mean points):
 
 ```perl6
 %res<MeanPoints>
 ```
 
-We can verify the result by looking at the plot of found clusters:
+We can verify the result by looking at the plot of the found clusters:
 
 ```perl6
 text-list-plot((|%res<Clusters>, %res<MeanPoints>), point-char => <▽ ☐ ●>, title => '▽ - 1st cluster; ☐ - 2nd cluster; ● - cluster centers')
 ```
-
-The function `find-clusters` can return results of different types controlled with the named argument "prop".
 
 **Remark:** By default `find-clusters` uses the K-means algorithm. The functions `k-means` and `k-mediods`
 call `find-clusters` with the option settings `method=>'K-means'` and `method=>'K-mediods'` respectively.
@@ -136,6 +137,18 @@ but I have not found to be necessary. (At this point of development.)
 
 -------
 
+## TODO
+
+- [ ] Implement Bi-sectional K-means algorithm, [AAp1].
+
+- [ ] Implement K-medoids algorithm.
+
+- [ ] Automatic determination of the number of clusters.
+
+- [ ] Implement Agglomerate algorithm.
+
+-------
+
 ## References
 
 ### Articles
@@ -150,41 +163,31 @@ but I have not found to be necessary. (At this point of development.)
 ### Packages
 
 [AAp1] Anton Antonov,
-[Implementation of the Apriori algorithm in Mathematica](https://github.com/antononcube/MathematicaForPrediction/blob/master/AprioriAlgorithm.m),
-(2014-2016),
-[MathematicaForPrediction at GitHub/antononcube](https://github.com/antononcube/MathematicaForPrediction/).
-
-[AAp1a] Anton Antonov
-[Implementation of the Apriori algorithm via Tries in Mathematica](https://github.com/antononcube/MathematicaForPrediction/blob/master/Misc/AprioriAlgorithmViaTries.m),
-(2022),
+[Bi-sectional K-means algorithm in Mathematica](https://github.com/antononcube/MathematicaForPrediction/blob/master/BiSectionalKMeans.m),
+(2020),
 [MathematicaForPrediction at GitHub/antononcube](https://github.com/antononcube/MathematicaForPrediction/).
 
 [AAp2] Anton Antonov,
-[Implementation of the Eclat algorithm in Mathematica](https://github.com/antononcube/MathematicaForPrediction/blob/master/EclatAlgorithm.m),
-(2022),
-[MathematicaForPrediction at GitHub/antononcube](https://github.com/antononcube/MathematicaForPrediction/).
-
-[AAp3] Anton Antonov,
 [Data::Generators Raku package](https://github.com/antononcube/Raku-Data-Generators),
 (2021),
 [GitHub/antononcube](https://github.com/antononcube).
 
-[AAp4] Anton Antonov,
+[AAp3] Anton Antonov,
 [Data::Reshapers Raku package](https://github.com/antononcube/Raku-Data-Reshapers),
 (2021),
 [GitHub/antononcube](https://github.com/antononcube).
 
-[AAp5] Anton Antonov,
+[AAp4] Anton Antonov,
 [Data::Summarizers Raku package](https://github.com/antononcube/Raku-Data-Summarizers),
 (2021),
 [GitHub/antononcube](https://github.com/antononcube).
 
-[AAp6] Anton Antonov,
+[AAp5] Anton Antonov,
 [UML::Translators Raku package](https://github.com/antononcube/Raku-UML-Translators),
 (2022),
 [GitHub/antononcube](https://github.com/antononcube).
 
-[AAp7] Anton Antonov,
+[AAp6] Anton Antonov,
 [Text::Plot Raku package](https://raku.land/zef:antononcube/Text::Plot),
 (2022),
 [GitHub/antononcube](https://github.com/antononcube).
