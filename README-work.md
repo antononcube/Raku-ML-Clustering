@@ -72,23 +72,26 @@ Here is how we use the function `find-clusters` to give an answer:
 
 ```perl6
 use ML::Clustering;
-my @cls = |find-clusters(@data3, 2, prop => 'Clusters');
-@cls>>.elems
+my %res = find-clusters(@data3, 2, prop => 'All');
+%res<Clusters>>>.elems
 ```
 
 Here is are sample points from each found cluster:
 
 ```perl6
-.say for @cls>>.pick(3);
+.say for %res<Clusters>>>.pick(3);
+```
+
+Here are the centers of the clusters (mean points):
+
+```perl6
+%res<MeanPoints>
 ```
 
 We can verify the result by looking at the plot of found clusters:
 
 ```perl6
-my @p1 = text-list-plot(@cls[0], point-char => '▽', x-limit => (1, 14), y-limit => (3.5, 13), width => 120, height => 25)>>.comb.flat;
-my @p2 = text-list-plot(@cls[1], point-char => '☐', x-limit => (1, 14), y-limit => (3.5, 13), width => 120, height => 25)>>.comb.flat;
-my @p3 = (@p1 Z @p2).map({ $_[0] eq ' ' ?? $_[1] !! $_[0] });
-say @p3.join;
+text-list-plot((%res<MeanPoints>, |%res<Clusters>), point-char => <● ▽ ☐>, width => 80, height => 25, title => '● - cluster centers; ▽ - 1st cluster; ☐ - 2nd cluster')
 ```
 
 The function `find-clusters` can return results of different types controlled with the named argument "prop".
