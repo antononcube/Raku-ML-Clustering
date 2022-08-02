@@ -34,7 +34,11 @@ role ML::Clustering::DistanceFunctions {
     ## Norm
     ##-------------------------------------------------------
 
-    method norm(@vec, $spec = 'euclidean' --> Numeric) {
+    multi method norm(@vec --> Numeric) {
+        return self.norm('euclidean', @vec);
+    }
+
+    multi method norm($spec, @vec --> Numeric) {
         given $spec {
             when $_ (elem) <max-norm inf-norm inf infinity> { @vec.map({ abs($_) }).max }
             when $_.Str eq '1' or $_ (elem) <one-norm one sum> { @vec.map({ abs($_) }).sum }
@@ -83,7 +87,7 @@ role ML::Clustering::DistanceFunctions {
         }
 
         # Compute distance
-        return (1.0 - ([+] (@v1 Z* @v2) )) / ( self.norm(@v1) * self.norm(@v2) );
+        return 1.0 - ([+] (@v1 >>*<< @v2) ) / ( self.norm(@v1) * self.norm(@v2) );
     }
 
     ##-------------------------------------------------------
