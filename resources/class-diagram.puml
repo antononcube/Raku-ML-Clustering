@@ -12,6 +12,14 @@ class ML::Clustering::KMeans  {
 ML::Clustering::KMeans --|> ML::Clustering::DistanceFunctions
 
 
+class "find-clusters" <<routine>> {
+}
+"find-clusters" --|> Routine
+"find-clusters" --|> Block
+"find-clusters" --|> Code
+"find-clusters" --|> Callable
+
+
 class ML::Clustering::DistanceFunctions <<role>> {
   {method} args-check
   {method} cosine-distance
@@ -19,6 +27,14 @@ class ML::Clustering::DistanceFunctions <<role>> {
   {method} euclidean-distance
   {method} hamming-distance
 }
+
+
+class "k-means" <<routine>> {
+}
+"k-means" --|> Routine
+"k-means" --|> Block
+"k-means" --|> Code
+"k-means" --|> Callable
 
 
 @enduml
