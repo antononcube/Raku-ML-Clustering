@@ -91,7 +91,7 @@ Here are the centers of the clusters (mean points):
 We can verify the result by looking at the plot of found clusters:
 
 ```perl6
-text-list-plot((%res<MeanPoints>, |%res<Clusters>), point-char => <● ▽ ☐>, width => 80, height => 25, title => '● - cluster centers; ▽ - 1st cluster; ☐ - 2nd cluster')
+text-list-plot((|%res<Clusters>, %res<MeanPoints>), point-char => <▽ ☐ ●>, width => 80, height => 25, title => '▽ - 1st cluster; ☐ - 2nd cluster; ● - cluster centers')
 ```
 
 The function `find-clusters` can return results of different types controlled with the named argument "prop".
