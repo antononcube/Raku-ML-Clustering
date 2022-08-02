@@ -21,6 +21,6 @@ is ML::Clustering::DistanceFunctions.cosine-distance([1,1,0], [0,1,2]), 1 - 1 / 
 is ML::Clustering::DistanceFunctions.euclidean-distance([1,1,0], [0,1,2]), sqrt(5), 'Euclidean distance over arrays';
 
 ## 5
-dies-ok ML::Clustering::DistanceFunctions.euclidean-distance([1,1,0,2], [0,1,2]), 'Euclidean distance over non-same length arrays';
+dies-ok { ML::Clustering::DistanceFunctions.euclidean-distance([1,1,0,2], [0,1,2]) }, 'Euclidean distance over non-same length arrays';
 
 done-testing;

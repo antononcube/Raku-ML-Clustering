@@ -19,7 +19,7 @@ my @data = [[8.8845, 8.85299], [10.7631, 10.0743], [5.5837, 5.7045], [6.20079, 4
             [5.97944, 4.54014], [3.91852, 4.13549], [5.32664, 5.00921], [13.5242, 9.17801], [11.0185, 10.4902], [3.7172, 6.02797], [7.5785, 10.6861],
             [9.19831, 10.6158], [7.75939, 10.5714], [6.89816, 5.55528], [10.2661, 10.3225], [8.90186, 11.6354]];
 
-plan 6;
+plan 7;
 
 ## 1
 ok find-clusters(@data, 2, method => 'K-means');
@@ -31,13 +31,16 @@ ok find-clusters(@data, 2, method => 'K-means', learning-parameter => 0.01,  max
 ok find-clusters(@data, 2, prop => 'Clusters');
 
 ## 4
-ok find-clusters(@data, 2, prop => 'ClusterIndexes');
+ok find-clusters(@data, 2, prop => 'ClusterLabels');
 
 ## 5
-ok find-clusters(@data, 2, distance-function => 'Cosine', prop => 'ClusterIndexes');
+dies-ok { find-clusters(@data, 2, prop => 'ClusterIndexes') };
 
 ## 6
-my @cls = find-clusters(@data, 2, distance-function => 'Cosine', prop => 'Clusters');
+ok find-clusters(@data, 2, distance-function => 'Cosine', prop => 'ClusterLabels');
+
+## 7
+my @cls = |find-clusters(@data, 2, distance-function => 'Cosine', prop => 'Clusters');
 is @cls ~~ Positional && @cls.elems == 2, True, 'Result shape';
 
 done-testing;
