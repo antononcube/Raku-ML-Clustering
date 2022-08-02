@@ -8,10 +8,12 @@
   ],
   "auth": "zef:antononcube",
   "depends": [
-    "Data::Reshapers:ver<0.1.9+>"
+    "Data::Reshapers:auth<zef:antononcube>:ver<0.1.9+>"
   ],
   "build-depends": [],
-  "test-depends": [],
+  "test-depends": [
+    "Data::Generators:auth<zef:antononcube>:ver<0.1.4+>"
+  ],
   "provides": {
     "ML::Clustering": "lib/ML/Clustering.rakumod",
     "ML::Clustering::DistanceFunctions": "lib/ML/Clustering/DistanceFunctions.rakumod",
