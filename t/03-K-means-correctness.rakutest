@@ -1,0 +1,25 @@
+use v6.d;
+use Test;
+
+use ML::Clustering;
+use Data::Generators;
+
+my $n = 100;
+my @data1 = (random-variate(NormalDistribution.new(5, 1.5), $n) X random-variate(NormalDistribution.new(5, 1), $n))
+        .pick(30);
+my @data2 = (random-variate(NormalDistribution.new(10, 1), $n) X random-variate(NormalDistribution.new(10, 1), $n))
+        .pick(50);
+my @data3 = [|@data1, |@data2].pick(*);
+
+plan 1;
+
+## 1
+my @cls = |find-clusters(@data3, 2, prop => 'Clusters');
+
+is
+        (@cls[0] (&) @data1).elems ≥ 0.95 * @data1.elems && (@cls[1] (&) @data2).elems ≥ 0.95 * @data2.elems ||
+                (@cls[1] (&) @data1).elems ≥ 0.95 * @data1.elems && (@cls[0] (&) @data2).elems ≥ 0.95 * @data2.elems,
+        True,
+        'Expected clusters';
+
+done-testing;

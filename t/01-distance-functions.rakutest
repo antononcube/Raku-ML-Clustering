@@ -1,0 +1,26 @@
+use v6.d;
+use Test;
+
+use lib '.';
+use lib './lib';
+
+use ML::Clustering::DistanceFunctions;
+
+plan 5;
+
+## 1
+is ML::Clustering::DistanceFunctions.hamming-distance([1,2,2],[4,7,2]), 2, 'Hamming distance over integers';
+
+## 2
+is ML::Clustering::DistanceFunctions.hamming-distance('abc'.comb, 'cba'.comb), 2, 'Hamming distance over characters';
+
+## 3
+is ML::Clustering::DistanceFunctions.cosine-distance([1,1,0], [0,1,2]), 1 - 1 / sqrt(10), 'Cosine distance over arrays';
+
+## 4
+is ML::Clustering::DistanceFunctions.euclidean-distance([1,1,0], [0,1,2]), sqrt(5), 'Euclidean distance over arrays';
+
+## 5
+dies-ok ML::Clustering::DistanceFunctions.euclidean-distance([1,1,0,2], [0,1,2]), 'Euclidean distance over non-same length arrays';
+
+done-testing;
