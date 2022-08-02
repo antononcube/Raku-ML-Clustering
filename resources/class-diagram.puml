@@ -1,0 +1,24 @@
+@startuml
+class ML::Clustering::KMeans  {
+  {method} BUILDALL
+  {method} args-check
+  {method} cosine-distance
+  {method} distance
+  {method} euclidean-distance
+  {method} find-clusters
+  {method} hamming-distance
+  {method} norm
+}
+ML::Clustering::KMeans --|> ML::Clustering::DistanceFunctions
+
+
+class ML::Clustering::DistanceFunctions <<role>> {
+  {method} args-check
+  {method} cosine-distance
+  {method} distance
+  {method} euclidean-distance
+  {method} hamming-distance
+}
+
+
+@enduml
