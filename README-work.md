@@ -187,7 +187,7 @@ Here is example that shows better clustering results is obtained with a smaller 
 
 The value `p` of the named argument `precision-goal` is used specify in stopping criteria that evaluates 
 the differences between the "old" and "new" clusters centers -- 
-id the maximum of that difference is less than `1 ** (-p)` then the cluster finding iterations stop. 
+if the maximum of that difference is less than `10 ** (-p)` then the cluster finding iterations stop. 
 Here is example that shows using the different precision goals:
 
 ```perl6
