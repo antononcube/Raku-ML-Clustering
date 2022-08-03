@@ -77,6 +77,20 @@ role ML::Clustering::DistanceFunctions {
     }
 
     ##-------------------------------------------------------
+    ## SquaredEuclidean
+    ##-------------------------------------------------------
+
+    method squared-euclidean-distance(@v1, @v2 --> Numeric) {
+
+        if !self.args-check(@v1, @v2) {
+            die;
+        }
+
+        # Compute distance
+        return [+] (@v1 Z @v2).map({ ($_[0] - $_[1]) ** 2});
+    }
+
+    ##-------------------------------------------------------
     ## Cosine
     ##-------------------------------------------------------
 
@@ -94,7 +108,7 @@ role ML::Clustering::DistanceFunctions {
     ## Hamming
     ##-------------------------------------------------------
 
-    method hamming-distance(@v1, @v2 --> Numeric) {
+    multi method hamming-distance(@v1, @v2 --> Numeric) {
 
         if @v1.elems != @v2.elems {
             die $msgSameLengths;
@@ -102,5 +116,65 @@ role ML::Clustering::DistanceFunctions {
 
         # Compute distance
         return (@v1 Zne @v2).sum;
+    }
+
+    multi method hamming-distance(Str $v1, Str $v2 --> Numeric) {
+        return self.hamming-distance($v1.comb, $v2.comb);
+    }
+
+    ##-------------------------------------------------------
+    ## Manhattan
+    ##-------------------------------------------------------
+
+    method manhattan-distance(@v1, @v2 --> Numeric) {
+
+        if !self.args-check(@v1, @v2) {
+            die;
+        }
+
+        # Compute distance
+        return (@v1 >>-<< @v2)>>.abs.sum;
+    }
+
+    ##-------------------------------------------------------
+    ## Chessboard
+    ##-------------------------------------------------------
+
+    method chessboard-distance(@v1, @v2 --> Numeric) {
+
+        if !self.args-check(@v1, @v2) {
+            die;
+        }
+
+        # Compute distance
+        return (@v1 >>-<< @v2)>>.abs.max;
+    }
+
+    ##-------------------------------------------------------
+    ## Bray-Curtis
+    ##-------------------------------------------------------
+
+    method bray-curtis-distance(@v1, @v2 --> Numeric) {
+
+        if !self.args-check(@v1, @v2) {
+            die;
+        }
+
+        # Compute distance
+        return (@v1 >>-<< @v2)>>.abs.sum / (@v1 >>+<< @v2)>>.abs.sum;
+    }
+
+    ##-------------------------------------------------------
+    ## Canberra
+    ##-------------------------------------------------------
+
+    method canberra-distance(@v1, @v2 --> Numeric) {
+
+        if !self.args-check(@v1, @v2) {
+            die;
+        }
+
+        # Compute distance
+        return sum((@v1 >>-<< @v2)>>.abs >>/<< (@v1>>.abs >>+<< @v2>>.abs));
     }
 }
