@@ -24,7 +24,8 @@ class ML::Clustering::KMeans
         }
 
         # Process options
-        my $knownDistanceFuncs = <Euclidean Cosine Manhattan ChessBoard Hamming>;
+        my $knownDistanceFuncs = ("BrayCurtis", "Canberra", "Chessboard", "Cosine", "Euclidean",
+                                  "Hamming", "Manhattan", "SquaredEuclidean");
         if $distance-function.isa(Whatever) { $distance-function = 'Euclidean' }
         if !($distance-function ~~ Str && $distance-function.lc ∈ $knownDistanceFuncs>>.lc) {
             die "The value of the argument distance-function is expected to be Whatever or one of { $knownDistanceFuncs.raku }."
