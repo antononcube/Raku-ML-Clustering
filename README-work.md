@@ -76,6 +76,9 @@ my %res = find-clusters(@data3, 2, prop => 'All');
 %res<Clusters>>>.elems
 ```
 
+**Remark:** The first argument is data points list-of-numeric-lists. 
+The second argument is number of clusters to be found. (See the TODO section below.)  
+
 **Remark:** The function `find-clusters` can return results of different types controlled with the named argument "prop".
 Using `prop => 'All'` returns a hash with all properties of the cluster finding result.
 
@@ -97,9 +100,99 @@ We can verify the result by looking at the plot of the found clusters:
 text-list-plot((|%res<Clusters>, %res<MeanPoints>), point-char => <▽ ☐ ●>, title => '▽ - 1st cluster; ☐ - 2nd cluster; ● - cluster centers')
 ```
 
-**Remark:** By default `find-clusters` uses the K-means algorithm. The functions `k-means` and `k-mediods`
-call `find-clusters` with the option settings `method=>'K-means'` and `method=>'K-mediods'` respectively.
+**Remark:** By default `find-clusters` uses the K-means algorithm. The functions `k-means` and `k-medoids`
+call `find-clusters` with the option settings `method=>'K-means'` and `method=>'K-medoids'` respectively.
 
+### More interesting looking data
+
+Here is more interesting looking 2D, `data2D2`:
+
+```perl6
+use Data::Reshapers;
+my $pointsPerCluster = 200;
+my @data2D5 = [[10,20,4],[20,60,6],[40,10,6],[-30,0,4],[100,100,8]].map({ 
+    random-variate(NormalDistribution.new($_[0], $_[2]), $pointsPerCluster) Z random-variate(NormalDistribution.new($_[1], $_[2]), $pointsPerCluster)
+   }).Array;
+@data2D5 = flatten(@data2D5, max-level=>1).pick(*);
+@data2D5.elems
+```
+
+Here is a plot of that data:
+
+```perl6
+text-list-plot(@data2D5)
+```
+
+Here we find clusters and plot them together with their mean points:
+
+```perl6
+my %clRes = find-clusters(@data2D5, 5, prop=>'All');
+text-list-plot([|%clRes<Clusters>, %clRes<MeanPoints>], point-char=><1 2 3 4 5 ●>)
+```
+
+-------
+
+## Control parameters (named arguments)
+
+### Distance function
+
+The value of the argument `distance-function` specifies the distance function to be used -- 
+close points tend to be placed in the same cluster. 
+Here is example comparing the "standard" Geometry distance, `euclidean-distance`, 
+with the "directional" distance, `cosine-distance`:
+
+***TBD...***
+
+Instead of distance functions we can use string identifiers of those functions:
+
+```perl6
+<Euclidean Cosine>.map({ say find-clusters(@data2D5, 3, distance-function => $_).&text-list-plot(title => 'distance function: ' ~ $_, point-char=><* ® o>), "\n"});
+```
+
+### Learning parameter
+
+At a certain execution step of the algorithm the learning parameter specifies how much the 
+current mean points have to be "pulled" in the direction of the estimated new points. 
+Smaller values of the named argument `learning-parameter` correspond to more cautious learning:
+
+```perl6
+(0.01, 0.1, 0.7).map({ say find-clusters(@data2D5, 2, learning-parameter => $_).&text-list-plot(title => 'learning-parameter:' ~ $_.Str, point-char=><* o>), "\n"});
+```
+
+We see the plots above that with smaller learning parameter better results are obtained. 
+But keep in mind that in some situations that small learning parameters can make 
+the computations too slow or produce worse clustering results.
+
+### Maximum steps
+
+The value m of the named argument `max-steps` is used in the stopping criteria of the implemented K-means algorithm -- 
+if in the number of iterations exceeds m then the algorithms stops. 
+Here is example that shows better clustering results is obtained with larger max steps:
+
+```perl6
+(1, 4, 100).map({ say find-clusters(@data2D5, 2, max-steps => $_).&text-list-plot(title => 'maximum steps: ' ~ $_.Str, point-char=><* o>), "\n" });
+```
+
+### Minimum reassignments fraction
+
+The value `m` of the option "min-reassignments-fraction" is used in the stopping criteria of the implemented K-means algorithm -- 
+if in the last iteration step the fraction of the number of points that have changed clusters is less m then the algorithms stops. 
+Here is example that shows better clustering results is obtained with a smaller fraction:
+
+```perl6
+(0.01, 0.3).map({ say find-clusters(@data2D5, 3, min-reassigments-fraction => $_).&text-list-plot(title => 'min-reassigments-fraction: ' ~ $_.Str, point-char=>Whatever), "\n" });
+```
+
+### Precision goal
+
+The value `p` of the named argument `precision-goal` is used specify in stopping criteria that evaluates 
+the differences between the "old" and "new" clusters centers -- 
+id the maximum of that difference is less than `1 ** (-p)` then the cluster finding iterations stop. 
+Here is example that shows using the different precision goals:
+
+```perl6
+(0.2, 5).map({ say find-clusters(@data2D5, 2, precision-goal => $_).&text-list-plot(title => 'precision goal: ' ~ $_.Str, point-char=>Whatever), "\n" });
+```
 
 -------
 
@@ -135,6 +228,10 @@ to-uml-spec ML::Clustering | java -jar ~/PlantUML/plantuml-1.2022.5.jar -pipe > 
 `ML::Clustering::KMeans`, `ML::Clustering::KMedoids`, `ML::Clustering::BiSectionalKMeans`, etc.,
 but I have not found to be necessary. (At this point of development.)
 
+**Remark:** It seems it is better to have a separate package for the distance functions, named, say,
+"ML::DistanceFunctions". (Although distance functions are not just for ML...)
+After thinking over package and function names I will make such a package. 
+
 -------
 
 ## TODO
@@ -145,7 +242,13 @@ but I have not found to be necessary. (At this point of development.)
 
 - [ ] Automatic determination of the number of clusters.
 
+- [ ] Allow data points to be `Pair` objects the keys of which are point labels.
+
+   - Hence, the returned clusters consist of those labels, not points themselves.
+
 - [ ] Implement Agglomerate algorithm.
+
+- [ ] Factor-out the distance functions in a separate package.
 
 -------
 
