@@ -6,21 +6,36 @@ use lib './lib';
 
 use ML::Clustering::DistanceFunctions;
 
-plan 5;
+plan 10;
 
 ## 1
-is ML::Clustering::DistanceFunctions.hamming-distance([1,2,2],[4,7,2]), 2, 'Hamming distance over integers';
+is ML::Clustering::DistanceFunctions.hamming-distance([1,2,2],[4,7,2]), 2, 'Hamming distance over integer vectors';
 
 ## 2
-is ML::Clustering::DistanceFunctions.hamming-distance('abc'.comb, 'cba'.comb), 2, 'Hamming distance over characters';
+is ML::Clustering::DistanceFunctions.hamming-distance('abc'.comb, 'cba'.comb), 2, 'Hamming distance over character vectors';
 
 ## 3
-is ML::Clustering::DistanceFunctions.cosine-distance([1,1,0], [0,1,2]), 1 - 1 / sqrt(10), 'Cosine distance over arrays';
+is ML::Clustering::DistanceFunctions.hamming-distance('abc', 'cba'), 2, 'Hamming distance over strings';
 
 ## 4
-is ML::Clustering::DistanceFunctions.euclidean-distance([1,1,0], [0,1,2]), sqrt(5), 'Euclidean distance over arrays';
+is ML::Clustering::DistanceFunctions.cosine-distance([1,1,0], [0,1,2]), 1 - 1 / sqrt(10), 'Cosine distance over arrays';
 
 ## 5
+is ML::Clustering::DistanceFunctions.euclidean-distance([1,1,0], [0,1,2]), sqrt(5), 'Euclidean distance over arrays';
+
+## 6
 dies-ok { ML::Clustering::DistanceFunctions.euclidean-distance([1,1,0,2], [0,1,2]) }, 'Euclidean distance over non-same length arrays';
+
+## 7
+is ML::Clustering::DistanceFunctions.manhattan-distance([1,2,3], [2,4,6]), 6, 'Manhattan distance over arrays';
+
+## 8
+is ML::Clustering::DistanceFunctions.chessboard-distance([1,2,3], [2,4,6]), 3, 'Chessboard distance over arrays';
+
+## 9
+is ML::Clustering::DistanceFunctions.bray-curtis-distance([1,2,3], [2,4,6]), 1/3, 'Bray-Curtis distance over arrays';
+
+## 10
+is ML::Clustering::DistanceFunctions.canberra-distance([1,2,3], [2,4,6]), 1, 'Canberra distance over arrays';
 
 done-testing;
