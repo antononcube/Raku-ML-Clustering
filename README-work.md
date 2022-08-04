@@ -8,12 +8,16 @@ Machine Learning (ML)
 [Clustering (or Cluster analysis)](https://en.wikipedia.org/wiki/Cluster_analysis)
 functions, [Wk1].
 
-The Clustering framework includes the algorithms 
-[K-means](https://en.wikipedia.org/wiki/K-means_clustering) 
-and 
-[K-medoids](https://en.wikipedia.org/wiki/K-medoids), 
-and the distance functions Euclidean, Cosine, Hamming, Manhattan, and others,
-and their corresponding similarity functions.
+The Clustering framework includes:
+
+- The algorithms 
+  [K-means](https://en.wikipedia.org/wiki/K-means_clustering) 
+  and 
+  [K-medoids](https://en.wikipedia.org/wiki/K-medoids), 
+  and others
+
+- The distance functions Euclidean, Cosine, Hamming, Manhattan, and others,
+  and their corresponding similarity functions
 
 The data in the examples below is generated and manipulated with the packages
 ["Data::Generators"](https://raku.land/zef:antononcube/Data::Generators),
@@ -76,8 +80,9 @@ my %res = find-clusters(@data3, 2, prop => 'All');
 %res<Clusters>>>.elems
 ```
 
-**Remark:** The first argument is data points list-of-numeric-lists. 
-The second argument is number of clusters to be found. (See the TODO section below.)  
+**Remark:** The first argument is data points that is a list-of-numeric-lists. 
+The second argument is a number of clusters to be found. 
+(It is in the TODO list to have the number clusters automatically determined -- currently they are not.)  
 
 **Remark:** The function `find-clusters` can return results of different types controlled with the named argument "prop".
 Using `prop => 'All'` returns a hash with all properties of the cluster finding result.
@@ -103,9 +108,11 @@ text-list-plot((|%res<Clusters>, %res<MeanPoints>), point-char => <▽ ☐ ●>,
 **Remark:** By default `find-clusters` uses the K-means algorithm. The functions `k-means` and `k-medoids`
 call `find-clusters` with the option settings `method=>'K-means'` and `method=>'K-medoids'` respectively.
 
-### More interesting looking data
+------
 
-Here is more interesting looking 2D, `data2D2`:
+## More interesting looking data
+
+Here is more interesting looking two-dimensional data, `data2D2`:
 
 ```perl6
 use Data::Reshapers;
@@ -126,6 +133,7 @@ text-list-plot(@data2D5)
 Here we find clusters and plot them together with their mean points:
 
 ```perl6
+srand(32);
 my %clRes = find-clusters(@data2D5, 5, prop=>'All');
 text-list-plot([|%clRes<Clusters>, %clRes<MeanPoints>], point-char=><1 2 3 4 5 ●>)
 ```
@@ -133,6 +141,9 @@ text-list-plot([|%clRes<Clusters>, %clRes<MeanPoints>], point-char=><1 2 3 4 5 �
 -------
 
 ## Control parameters (named arguments)
+
+In this section we describe the named arguments of `find-clusters` that can be used to
+control the cluster finding process.
 
 ### Distance function
 
@@ -180,6 +191,7 @@ if in the last iteration step the fraction of the number of points that have cha
 Here is example that shows better clustering results is obtained with a smaller fraction:
 
 ```perl6
+srand(9);
 (0.01, 0.3).map({ say find-clusters(@data2D5, 3, min-reassigments-fraction => $_).&text-list-plot(title => 'min-reassigments-fraction: ' ~ $_.Str, point-char=>Whatever), "\n" });
 ```
 
@@ -191,6 +203,7 @@ if the maximum of that difference is less than `10 ** (-p)` then the cluster fin
 Here is example that shows using the different precision goals:
 
 ```perl6
+srand(1921);
 (0.2, 5).map({ say find-clusters(@data2D5, 2, precision-goal => $_).&text-list-plot(title => 'precision goal: ' ~ $_.Str, point-char=>Whatever), "\n" });
 ```
 
