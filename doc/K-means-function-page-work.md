@@ -204,7 +204,7 @@ Cluster by body weight only:
 
 ```perl6
 my %awRes1 = find-clusters(@data2D2.map({ [$_<BodyWeight>, ] }), 4, prop=>'All');
-.say for %awRes1<IndexClusters>.map({ to-pretty-table(@data2D2[|$_]) });
+.say for %awRes1<IndexClusters>.map({ to-pretty-table(@data2D2[|$_], field-names => <Species BodyWeight BodyWeight>, align => {:Species<l>}) });
 ```
 
 Note that obtained clusters seem well separated by weight:
@@ -218,7 +218,7 @@ for that combination of weights it makes sense to cluster with Cosine distance:
 
 ```perl6
 my %awRes2 = find-clusters(@data2D2.map({ $_<BodyWeight BrainWeight> }), 4, distance-function=>'Cosine', prop=>'All');
-.say for %awRes2<IndexClusters>.map({ to-pretty-table(@data2D2[|$_]) });
+.say for %awRes2<IndexClusters>.map({ to-pretty-table(@data2D2[|$_], field-names => <Species BodyWeight BodyWeight>, align => {:Species<l>}) });
 ```
 
 Note that obtained clusters seem well separated by body-brain weights directions:
