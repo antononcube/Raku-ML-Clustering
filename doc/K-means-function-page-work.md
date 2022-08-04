@@ -186,18 +186,46 @@ srand(1921);
 
 ### Animal weights clustering
 
-Take animal weights data2D2 (and show data2D2 dimensions):
+Take animal weights `data2D2` (and show `data2D2` dimensions):
+
+```perl6
+use Data::ExampleDatasets;
+my @data2D2 = |example-dataset('https://raw.githubusercontent.com/antononcube/Raku-ML-Clustering/main/resources/dfAnimalWeights.csv');
+say "dimensions: {dimensions(@data2D2)}";
+```
 
 Summarize:
 
+```perl6
+records-summary(@data2D2)
+```
+
 Cluster by body weight only:
+
+```perl6
+my %awRes1 = find-clusters(@data2D2.map({ [$_<BodyWeight>, ] }), 4, prop=>'All');
+.say for %awRes1<IndexClusters>.map({ to-pretty-table(@data2D2[|$_]) });
+```
 
 Note that obtained clusters seem well separated by weight:
 
+```perl6
+text-list-plot(((%awRes1<ClusterLabels>.Array >>+>> 1) Z @data2D2.map({ $_<BodyWeight> }))>>.log10.List)
+```
+
 Here we cluster using both body weight and brain weight -- 
-for that combination of weights it makes sense to cluster with CosineDistance:
+for that combination of weights it makes sense to cluster with Cosine distance:
+
+```perl6
+my %awRes2 = find-clusters(@data2D2.map({ $_<BodyWeight BrainWeight> }), 4, distance-function=>'Cosine', prop=>'All');
+.say for %awRes2<IndexClusters>.map({ to-pretty-table(@data2D2[|$_]) });
+```
 
 Note that obtained clusters seem well separated by body-brain weights directions:
+
+```perl6
+text-list-plot(%awRes2<Clusters>>>.log10);
+```
 
 ------
 
@@ -205,6 +233,11 @@ Note that obtained clusters seem well separated by body-brain weights directions
 
 Often it is good idea to run `k-means` a few times:
 
+```perl6
+for 1...3 {
+say text-list-plot(k-means(@data2D5, 5), point-char=>(1..5)>>.Str, title=>"run: {$_}"), "\n";
+}
+```
 
 -------
 
