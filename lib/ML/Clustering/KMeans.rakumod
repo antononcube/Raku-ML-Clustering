@@ -137,7 +137,7 @@ class ML::Clustering::KMeans
         @inputClusterIndexPairs = @clustersIndexes Z=> ^@inputs.elems;
         my @indexClusters = @inputClusterIndexPairs.categorize({ $_.key }).map({ $_.value>>.value });
 
-        my %res = MeanPoints => @means, Clusters => @clusters, ClusterLabels => @clustersIndexes, ClusterIndexes => @indexClusters;
+        my %res = MeanPoints => @means, Clusters => @clusters, ClusterLabels => @clustersIndexes, IndexClusters => @indexClusters;
         if $prop.lc eq 'all' {
             return %res;
         } else {
