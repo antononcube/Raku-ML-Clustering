@@ -47,7 +47,7 @@ zef install https://github.com/antononcube/Raku-ML-Clustering
 
 -------
 
-## Cluster finding 
+## Usage example
 
 Here we derive a set of random points, and summarize it:
 
@@ -140,72 +140,15 @@ text-list-plot([|%clRes<Clusters>, %clRes<MeanPoints>], point-char=><1 2 3 4 5 â
 
 -------
 
-## Control parameters (named arguments)
+## Detailed function pages
 
-In this section we describe the named arguments of `find-clusters` that can be used to
-control the cluster finding process.
+Detailed parameter explanations and usage examples for the functions provided by the package are given in:
 
-### Distance function
+- ["K-means function page"](./doc/K-means-function-page.md)
 
-The value of the argument `distance-function` specifies the distance function to be used -- 
-close points tend to be placed in the same cluster. 
-Here is example comparing the "standard" Geometry distance, `euclidean-distance`, 
-with the "directional" distance, `cosine-distance`:
+- ["K-medoids function page"]()
 
-***TBD...***
-
-Instead of distance functions we can use string identifiers of those functions:
-
-```perl6
-<Euclidean Cosine>.map({ say find-clusters(@data2D5, 3, distance-function => $_).&text-list-plot(title => 'distance function: ' ~ $_, point-char=><* Â® o>), "\n"});
-```
-
-### Learning parameter
-
-At a certain execution step of the algorithm the learning parameter specifies how much the 
-current mean points have to be "pulled" in the direction of the estimated new points. 
-Smaller values of the named argument `learning-parameter` correspond to more cautious learning:
-
-```perl6
-(0.01, 0.1, 0.7).map({ say find-clusters(@data2D5, 2, learning-parameter => $_).&text-list-plot(title => 'learning-parameter:' ~ $_.Str, point-char=><* o>), "\n"});
-```
-
-We see the plots above that with smaller learning parameter better results are obtained. 
-But keep in mind that in some situations that small learning parameters can make 
-the computations too slow or produce worse clustering results.
-
-### Maximum steps
-
-The value m of the named argument `max-steps` is used in the stopping criteria of the implemented K-means algorithm -- 
-if in the number of iterations exceeds m then the algorithms stops. 
-Here is example that shows better clustering results is obtained with larger max steps:
-
-```perl6
-(1, 4, 100).map({ say find-clusters(@data2D5, 2, max-steps => $_).&text-list-plot(title => 'maximum steps: ' ~ $_.Str, point-char=><* o>), "\n" });
-```
-
-### Minimum reassignments fraction
-
-The value `m` of the option "min-reassignments-fraction" is used in the stopping criteria of the implemented K-means algorithm -- 
-if in the last iteration step the fraction of the number of points that have changed clusters is less m then the algorithms stops. 
-Here is example that shows better clustering results is obtained with a smaller fraction:
-
-```perl6
-srand(9);
-(0.01, 0.3).map({ say find-clusters(@data2D5, 3, min-reassigments-fraction => $_).&text-list-plot(title => 'min-reassigments-fraction: ' ~ $_.Str, point-char=>Whatever), "\n" });
-```
-
-### Precision goal
-
-The value `p` of the named argument `precision-goal` is used specify in stopping criteria that evaluates 
-the differences between the "old" and "new" clusters centers -- 
-if the maximum of that difference is less than `10 ** (-p)` then the cluster finding iterations stop. 
-Here is example that shows using the different precision goals:
-
-```perl6
-srand(1921);
-(0.2, 5).map({ say find-clusters(@data2D5, 2, precision-goal => $_).&text-list-plot(title => 'precision goal: ' ~ $_.Str, point-char=>Whatever), "\n" });
-```
+- ["Bi-sectional-K-means function page"]()
 
 -------
 
