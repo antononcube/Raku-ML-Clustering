@@ -226,13 +226,15 @@ my @blackPoints = [[11, 15], [40, 15], [9, 14], [10, 14], [11, 14], [12, 14], [1
 Plot the extracted point-vectors:
 
 ```perl6
-text-list-plot(@blackPoints, width=>70, height => 16)
+text-list-plot(@blackPoints, width=>76, height => 18)
 ```
 
 Cluster and plot the clusters using different distance functions:
 
 ```perl6
-<Euclidean Cosine Chessboard Manhattan BrayCurtis Canberra>.map({ say text-list-plot(k-means(@blackPoints, 7, distance-function=>$_), point-char=>(1..7)>>.Str, title=>$_, width=>70, height => 16), "\n" })
+<Euclidean Cosine Chessboard Manhattan BrayCurtis Canberra>.map({ 
+    say text-list-plot(k-means(@blackPoints, 7, distance-function=>$_), point-char=>(1..7)>>.Str, title=>$_, width=>76, height => 18), "\n" 
+})
 ```
 
 -------
@@ -241,7 +243,7 @@ Cluster and plot the clusters using different distance functions:
 
 ### Articles, books
 
-[Wk1] Wikipedia entry, ["Cluster Analysis"](https://en.wikipedia.org/wiki/K-means_clustering).
+[Wk1] Wikipedia entry, ["K-means clustering"](https://en.wikipedia.org/wiki/K-means_clustering).
 
 [AA1] Anton Antonov,
 ["Introduction to data wrangling with Raku"](https://rakuforprediction.wordpress.com/2021/12/31/introduction-to-data-wrangling-with-raku/),
