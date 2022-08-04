@@ -53,11 +53,16 @@ role ML::Clustering::DistanceFunctions {
     ##-------------------------------------------------------
     method distance(Str $spec, @v1, @v2) {
         given $spec.lc {
-            when $spec ∈ <Euclidean EuclideanDistance>>>.lc { return self.euclidean-distance(@v1, @v2); }
+            when $spec ∈ <BrayCurtis BrayCurtisDistance>>>.lc { return self.bray-curtis-distance(@v1, @v2); }
+            when $spec ∈ <Canberra CanberraDistance>>>.lc { return self.canberra-distance(@v1, @v2); }
+            when $spec ∈ <Chessboard ChessboardDistance>>>.lc { return self.chessboard-distance(@v1, @v2); }
             when $spec ∈ <Cosine CosineDistance>>>.lc { return self.cosine-distance(@v1, @v2); }
+            when $spec ∈ <Euclidean EuclideanDistance>>>.lc { return self.euclidean-distance(@v1, @v2); }
             when $spec ∈ <Hamming HammingDistance>>>.lc { return self.hamming-distance(@v1, @v2); }
+            when $spec ∈ <Manhattan ManhattanDistance>>>.lc { return self.manhattan-distance(@v1, @v2); }
+            when $spec ∈ <SquaredEuclidean SquaredEuclideanDistance>>>.lc { return self.squared-euclidean-distance(@v1, @v2); }
             default {
-                die "Do not how to compute distance named $spec.";
+                die "Do not know how to compute distance named $spec.";
             }
         }
     }
