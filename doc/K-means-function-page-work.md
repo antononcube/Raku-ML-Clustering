@@ -118,7 +118,7 @@ text-list-plot(@data2D5)
 Here we find clusters and plot them together with their mean points:
 
 ```perl6
-srand(32);
+srand(923);
 my %clRes = find-clusters(@data2D5, 5, prop => 'All');
 text-list-plot([|%clRes<Clusters>, %clRes<MeanPoints>], point-char => <1 2 3 4 5 ●>)
 ```
