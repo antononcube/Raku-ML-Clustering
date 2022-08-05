@@ -30,26 +30,16 @@ calls `find-clusters` with the option setting `method=>'K-means'`.
 
 The function `k-means` finds clusters using the K-means algorithm. Here are the arguments:
 
-- `@points` -- data points.
-- `$k` -- number of clusters.
-- `:$distance-function` -- points distance function.
-- `:$learning-parameter` -- re-assignment learning parameter.
-- `:$max-steps` -- maximum number of steps.
-- `:$min-reassignment-fraction` -- minimum re-assignments required to continue the iterations.
-- `:$precision-goal` -- precision goal.
-- `:$prop` -- property to give as a result, one of 'MeanPoints', 'Clusters', 'ClusterLabels', 'IndexClusters', '
-  Properties', 'All'.
-
-| Argument                      | Default   | Description                                                                                                          |
-|-------------------------------|----------------|----------------------------------------------------------------------------------------------------------------------|
-| `@points`                     | _              | data points                                                                                                          |
-| `$k`                          | _              | number of clusters                                                                                                   |
-| `:$distance-function`         | 'Euclidean'    | points distance function                                                                                             |
-| `:$learning-parameter`        | 0.01           | re-assignment learning parameter                                                                                     |
-| `:$max-steps`                 | 1000           | maximum number of steps                                                                                              |
-| `:$min-reassignment-fraction` | 1/200          | minimum re-assignments required to continue the iterations                                                           |
-| `:$precision-goal`            | 6              | precision goal                                                                                                       |
-| `:$prop`                      | 'Clusters'     | property to give as a result, one of 'MeanPoints', 'Clusters', 'ClusterLabels', 'IndexClusters', 'Properties', 'All' |
+| Argument                      | Default      | Description                                                                                                          |
+|-------------------------------|--------------|----------------------------------------------------------------------------------------------------------------------|
+| `@points`                     | _            | data points                                                                                                          |
+| `$k`                          | _            | number of clusters                                                                                                   |
+| `:$distance-function`         | 'Euclidean'  | points distance function                                                                                             |
+| `:$learning-parameter`        | 0.01         | re-assignment learning parameter                                                                                     |
+| `:$max-steps`                 | 1000         | maximum number of steps                                                                                              |
+| `:$min-reassignment-fraction` | 0.005        | minimum re-assignments required to continue the iterations                                                           |
+| `:$precision-goal`            | 6            | precision goal                                                                                                       |
+| `:$prop`                      | 'Clusters'   | property to give as a result, one of 'MeanPoints', 'Clusters', 'ClusterLabels', 'IndexClusters', 'Properties', 'All' |
 
 -------
 
