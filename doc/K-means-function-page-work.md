@@ -25,6 +25,21 @@ calls `find-clusters` with the option setting `method=>'K-means'`.
 
 -------
 
+## In brief
+
+The function `k-means` finds clusters using the K-means algorithm. Here are the arguments:
+
+- `@points` -- data points.
+- `$k` -- number of clusters.
+- `:$distance-function` -- points distance function.
+- `:$learning-parameter` -- re-assignment learning parameter. 
+- `:$max-steps` -- maximum number of steps.
+- `:$min-reassignment-fraction` -- minimum re-assignments required to continue the iterations.
+- `:$precision-goal` -- precision goal.
+- `:$prop` -- property to give as a result, one of 'MeanPoints', 'Clusters', 'ClusterLabels', 'IndexClusters', 'Properties', 'All'.
+
+-------
+
 ## Basic examples 
 
 Here we derive a set of random points, and summarize it:
