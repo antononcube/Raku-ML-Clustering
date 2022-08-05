@@ -1,11 +1,11 @@
 # `k-means` function page
 
-## Introduction 
+## Introduction
 
-This computable document has explanations and examples of using the function `k-means` of the package 
+This computable document has explanations and examples of using the function `k-means` of the package
 ["ML::Clustering"](https://github.com/antononcube/Raku-ML-Clustering), [AAp1].
 
-For an introduction to the [K-means](https://en.wikipedia.org/wiki/K-means_clustering) algorithm see [Wk1] or [AN1]. 
+For an introduction to the [K-means](https://en.wikipedia.org/wiki/K-means_clustering) algorithm see [Wk1] or [AN1].
 
 The implementation uses the distance functions Euclidean, Cosine, Hamming, Manhattan, and others.
 
@@ -13,13 +13,14 @@ The data in the examples below is generated and manipulated with the packages
 ["Data::Generators"](https://raku.land/zef:antononcube/Data::Generators),
 ["Data::Reshapers"](https://raku.land/zef:antononcube/Data::Reshapers), and
 ["Data::Summarizers"](https://raku.land/zef:antononcube/Data::Summarizers), described in the article
-["Introduction to data wrangling with Raku"](https://rakuforprediction.wordpress.com/2021/12/31/introduction-to-data-wrangling-with-raku/),
+["Introduction to data wrangling with Raku"](https://rakuforprediction.wordpress.com/2021/12/31/introduction-to-data-wrangling-with-raku/)
+,
 [AA1].
 
 The plots are made with the package
 ["Text::Plot"](https://raku.land/zef:antononcube/Text::Plot), [AAp6].
 
-**Remark:** By default `find-clusters` of [AAp1] uses the K-means algorithm. The function `k-means` 
+**Remark:** By default `find-clusters` of [AAp1] uses the K-means algorithm. The function `k-means`
 calls `find-clusters` with the option setting `method=>'K-means'`.
 
 
@@ -32,15 +33,27 @@ The function `k-means` finds clusters using the K-means algorithm. Here are the 
 - `@points` -- data points.
 - `$k` -- number of clusters.
 - `:$distance-function` -- points distance function.
-- `:$learning-parameter` -- re-assignment learning parameter. 
+- `:$learning-parameter` -- re-assignment learning parameter.
 - `:$max-steps` -- maximum number of steps.
 - `:$min-reassignment-fraction` -- minimum re-assignments required to continue the iterations.
 - `:$precision-goal` -- precision goal.
-- `:$prop` -- property to give as a result, one of 'MeanPoints', 'Clusters', 'ClusterLabels', 'IndexClusters', 'Properties', 'All'.
+- `:$prop` -- property to give as a result, one of 'MeanPoints', 'Clusters', 'ClusterLabels', 'IndexClusters', '
+  Properties', 'All'.
+
+| Argument                      | Default   | Description                                                                                                          |
+|-------------------------------|----------------|----------------------------------------------------------------------------------------------------------------------|
+| `@points`                     | _              | data points                                                                                                          |
+| `$k`                          | _              | number of clusters                                                                                                   |
+| `:$distance-function`         | 'Euclidean'    | points distance function                                                                                             |
+| `:$learning-parameter`        | 0.01           | re-assignment learning parameter                                                                                     |
+| `:$max-steps`                 | 1000           | maximum number of steps                                                                                              |
+| `:$min-reassignment-fraction` | 1/200          | minimum re-assignments required to continue the iterations                                                           |
+| `:$precision-goal`            | 6              | precision goal                                                                                                       |
+| `:$prop`                      | 'Clusters'     | property to give as a result, one of 'MeanPoints', 'Clusters', 'ClusterLabels', 'IndexClusters', 'Properties', 'All' |
 
 -------
 
-## Basic examples 
+## Basic examples
 
 Here we derive a set of random points, and summarize it:
 
@@ -50,8 +63,10 @@ use Data::Summarizers;
 use Text::Plot;
 
 my $n = 100;
-my @data1 = (random-variate(NormalDistribution.new(5,1.5), $n) X random-variate(NormalDistribution.new(5,1), $n)).pick(30);
-my @data2 = (random-variate(NormalDistribution.new(10,1), $n) X random-variate(NormalDistribution.new(10,1), $n)).pick(50);
+my @data1 = (random-variate(NormalDistribution.new(5, 1.5), $n) X random-variate(NormalDistribution.new(5, 1), $n))
+        .pick(30);
+my @data2 = (random-variate(NormalDistribution.new(10, 1), $n) X random-variate(NormalDistribution.new(10, 1), $n))
+        .pick(50);
 my @data2D2 = [|@data1, |@data2].pick(*);
 records-summary(@data2D2)
 ```
@@ -71,10 +86,10 @@ my @cls = |k-means(@data2D2, 2);
 @cls>>.elems
 ```
 
-**Remark:** The first argument is data points that is a list-of-numeric-lists. 
-The second argument is a number of clusters to be found. 
+**Remark:** The first argument is data points that is a list-of-numeric-lists. The second argument is a number of
+clusters to be found.
 
-**Remark:** 
+**Remark:**
 Here are sample points from each found cluster:
 
 ```perl6
@@ -96,10 +111,11 @@ Here is more interesting looking two-dimensional data, `data2D2`:
 ```perl6
 use Data::Reshapers;
 my $pointsPerCluster = 200;
-my @data2D5 = [[10,20,4],[20,60,6],[40,10,6],[-30,0,4],[100,100,8]].map({ 
-    random-variate(NormalDistribution.new($_[0], $_[2]), $pointsPerCluster) Z random-variate(NormalDistribution.new($_[1], $_[2]), $pointsPerCluster)
-   }).Array;
-@data2D5 = flatten(@data2D5, max-level=>1).pick(*);
+my @data2D5 = [[10, 20, 4], [20, 60, 6], [40, 10, 6], [-30, 0, 4], [100, 100, 8]].map({
+    random-variate(NormalDistribution.new($_[0], $_[2]), $pointsPerCluster) Z random-variate(NormalDistribution.new(
+            $_[1], $_[2]), $pointsPerCluster)
+}).Array;
+@data2D5 = flatten(@data2D5, max-level => 1).pick(*);
 @data2D5.elems
 ```
 
@@ -113,8 +129,8 @@ Here we find clusters and plot them together with their mean points:
 
 ```perl6
 srand(32);
-my %clRes = find-clusters(@data2D5, 5, prop=>'All');
-text-list-plot([|%clRes<Clusters>, %clRes<MeanPoints>], point-char=><1 2 3 4 5 ●>)
+my %clRes = find-clusters(@data2D5, 5, prop => 'All');
+text-list-plot([|%clRes<Clusters>, %clRes<MeanPoints>], point-char => <1 2 3 4 5 ●>)
 ```
 
 **Remark:** The function `k-clusters` can return results of different types controlled with the named argument "prop".
@@ -130,69 +146,71 @@ Here are the centers of the clusters (the mean points):
 
 ## Control parameters (named arguments)
 
-In this section we describe the named arguments of `find-clusters` that can be used to
-control the cluster finding process.
+In this section we describe the named arguments of `find-clusters` that can be used to control the cluster finding
+process.
 
 ### Distance function
 
-The value of the argument `distance-function` specifies the distance function to be used -- 
-close points tend to be placed in the same cluster. 
-Here is example comparing the "standard" Geometry distance, `euclidean-distance`, 
-with the "directional" distance, `cosine-distance`:
+The value of the argument `distance-function` specifies the distance function to be used -- close points tend to be
+placed in the same cluster. Here is example comparing the "standard" Geometry distance, `euclidean-distance`, with the "
+directional" distance, `cosine-distance`:
 
 ***TBD...***
 
 Instead of distance functions we can use string identifiers of those functions:
 
 ```perl6
-<Euclidean Cosine>.map({ say find-clusters(@data2D5, 3, distance-function => $_).&text-list-plot(title => 'distance function: ' ~ $_, point-char=><* ® o>), "\n"});
+<Euclidean Cosine>.map({ say find-clusters(@data2D5, 3, distance-function => $_).&text-list-plot(
+        title => 'distance function: ' ~ $_, point-char => <* ® o>), "\n" });
 ```
 
 ### Learning parameter
 
-At a certain execution step of the algorithm the learning parameter specifies how much the 
-current mean points have to be "pulled" in the direction of the estimated new points. 
-Smaller values of the named argument `learning-parameter` correspond to more cautious learning:
+At a certain execution step of the algorithm the learning parameter specifies how much the current mean points have to
+be "pulled" in the direction of the estimated new points. Smaller values of the named argument `learning-parameter`
+correspond to more cautious learning:
 
 ```perl6
-(0.01, 0.1, 0.7).map({ say find-clusters(@data2D5, 2, learning-parameter => $_).&text-list-plot(title => 'learning-parameter:' ~ $_.Str, point-char=><* o>), "\n"});
+(0.01, 0.1, 0.7).map({ say find-clusters(@data2D5, 2, learning-parameter => $_).&text-list-plot(
+        title => 'learning-parameter:' ~ $_.Str, point-char => <* o>), "\n" });
 ```
 
-We see the plots above that with smaller learning parameter better results are obtained. 
-But keep in mind that in some situations that small learning parameters can make 
-the computations too slow or produce worse clustering results.
+We see the plots above that with smaller learning parameter better results are obtained. But keep in mind that in some
+situations that small learning parameters can make the computations too slow or produce worse clustering results.
 
 ### Maximum steps
 
-The value m of the named argument `max-steps` is used in the stopping criteria of the implemented K-means algorithm -- 
-if in the number of iterations exceeds m then the algorithms stops. 
-Here is example that shows better clustering results is obtained with larger max steps:
+The value m of the named argument `max-steps` is used in the stopping criteria of the implemented K-means algorithm --
+if in the number of iterations exceeds m then the algorithms stops. Here is example that shows better clustering results
+is obtained with larger max steps:
 
 ```perl6
-(1, 4, 100).map({ say find-clusters(@data2D5, 2, max-steps => $_).&text-list-plot(title => 'maximum steps: ' ~ $_.Str, point-char=><* o>), "\n" });
+(1, 4, 100).map({ say find-clusters(@data2D5, 2, max-steps => $_).&text-list-plot(title => 'maximum steps: ' ~ $_.Str,
+        point-char => <* o>), "\n" });
 ```
 
 ### Minimum reassignments fraction
 
-The value `m` of the option "min-reassignments-fraction" is used in the stopping criteria of the implemented K-means algorithm -- 
-if in the last iteration step the fraction of the number of points that have changed clusters is less m then the algorithms stops. 
-Here is example that shows better clustering results is obtained with a smaller fraction:
+The value `m` of the option "min-reassignments-fraction" is used in the stopping criteria of the implemented K-means
+algorithm -- if in the last iteration step the fraction of the number of points that have changed clusters is less m
+then the algorithms stops. Here is example that shows better clustering results is obtained with a smaller fraction:
 
 ```perl6
 srand(9);
-(0.01, 0.3).map({ say find-clusters(@data2D5, 3, min-reassigments-fraction => $_).&text-list-plot(title => 'min-reassigments-fraction: ' ~ $_.Str, point-char=>Whatever), "\n" });
+(0.01, 0.3).map({ say find-clusters(@data2D5, 3, min-reassigments-fraction => $_).&text-list-plot(
+        title => 'min-reassigments-fraction: ' ~ $_.Str, point-char => Whatever), "\n" });
 ```
 
 ### Precision goal
 
-The value `p` of the named argument `precision-goal` is used specify in stopping criteria that evaluates 
-the differences between the "old" and "new" clusters centers -- 
-if the maximum of that difference is less than `10 ** (-p)` then the cluster finding iterations stop. 
-Here is example that shows using the different precision goals:
+The value `p` of the named argument `precision-goal` is used specify in stopping criteria that evaluates the differences
+between the "old" and "new" clusters centers -- if the maximum of that difference is less than `10 ** (-p)` then the
+cluster finding iterations stop. Here is example that shows using the different precision goals:
 
 ```perl6
 srand(1921);
-(0.2, 5).map({ say find-clusters(@data2D5, 2, precision-goal => $_).&text-list-plot(title => 'precision goal: ' ~ $_.Str, point-char=>Whatever), "\n" });
+(0.2, 5).map({ say find-clusters(@data2D5, 2, precision-goal => $_).&text-list-plot(title => 'precision goal: ' ~ $_
+        .Str, point-char => Whatever), "\n" });
 ```
 
 -------
@@ -206,7 +224,7 @@ Take animal weights `data2D2` (and show `data2D2` dimensions):
 ```perl6
 use Data::ExampleDatasets;
 my @data2D2 = |example-dataset('https://raw.githubusercontent.com/antononcube/Raku-ML-Clustering/main/resources/dfAnimalWeights.csv');
-say "dimensions: {dimensions(@data2D2)}";
+say "dimensions: { dimensions(@data2D2) }";
 ```
 
 Summarize:
@@ -218,8 +236,9 @@ records-summary(@data2D2)
 Cluster by body weight only:
 
 ```perl6
-my %awRes1 = find-clusters(@data2D2.map({ [$_<BodyWeight>, ] }), 4, prop=>'All');
-.say for %awRes1<IndexClusters>.map({ to-pretty-table(@data2D2[|$_], field-names => <Species BodyWeight BodyWeight>, align => {:Species<l>}) });
+my %awRes1 = find-clusters(@data2D2.map({ [$_<BodyWeight>,] }), 4, prop => 'All');
+.say for %awRes1<IndexClusters>.map({ to-pretty-table(@data2D2[|$_], field-names => <Species BodyWeight BodyWeight>,
+        align => { :Species<l> }) });
 ```
 
 Note that obtained clusters seem well separated by weight:
@@ -228,12 +247,14 @@ Note that obtained clusters seem well separated by weight:
 text-list-plot(((%awRes1<ClusterLabels>.Array >>+>> 1) Z @data2D2.map({ $_<BodyWeight> }))>>.log10.List)
 ```
 
-Here we cluster using both body weight and brain weight -- 
-for that combination of weights it makes sense to cluster with Cosine distance:
+Here we cluster using both body weight and brain weight -- for that combination of weights it makes sense to cluster
+with Cosine distance:
 
 ```perl6
-my %awRes2 = find-clusters(@data2D2.map({ $_<BodyWeight BrainWeight> }), 4, distance-function=>'Cosine', prop=>'All');
-.say for %awRes2<IndexClusters>.map({ to-pretty-table(@data2D2[|$_], field-names => <Species BodyWeight BodyWeight>, align => {:Species<l>}) });
+my %awRes2 = find-clusters(@data2D2.map({ $_<BodyWeight BrainWeight> }), 4, distance-function => 'Cosine',
+        prop => 'All');
+.say for %awRes2<IndexClusters>.map({ to-pretty-table(@data2D2[|$_], field-names => <Species BodyWeight BodyWeight>,
+        align => { :Species<l> }) });
 ```
 
 Note that obtained clusters seem well separated by body-brain weights directions:
@@ -249,8 +270,8 @@ text-list-plot(%awRes2<Clusters>>>.log10);
 Often it is good idea to run `k-means` a few times:
 
 ```perl6
-for 1...3 {
-say text-list-plot(k-means(@data2D5, 5), point-char=>(1..5)>>.Str, title=>"run: {$_}"), "\n";
+for 1 ... 3 {
+    say text-list-plot(k-means(@data2D5, 5), point-char => (1 .. 5)>>.Str, title => "run: { $_ }"), "\n";
 }
 ```
 
@@ -258,8 +279,8 @@ say text-list-plot(k-means(@data2D5, 5), point-char=>(1..5)>>.Str, title=>"run: 
 
 ## Possible Issues
 
-The initial mean points of the clusters are chosen at random. 
-Hence, to reproduce clustering results `srand` has to be used.
+The initial mean points of the clusters are chosen at random. Hence, to reproduce clustering results `srand` has to be
+used.
 
 -------
 
@@ -274,14 +295,15 @@ my @blackPoints = [[11, 15], [40, 15], [9, 14], [10, 14], [11, 14], [12, 14], [1
 Plot the extracted point-vectors:
 
 ```perl6
-text-list-plot(@blackPoints, width=>76, height => 18)
+text-list-plot(@blackPoints, width => 76, height => 18)
 ```
 
 Cluster and plot the clusters using different distance functions:
 
 ```perl6
-<Euclidean Cosine Chessboard Manhattan BrayCurtis Canberra>.map({ 
-    say text-list-plot(k-means(@blackPoints, 7, distance-function=>$_), point-char=>(1..7)>>.Str, title=>$_, width=>76, height => 18), "\n" 
+<Euclidean Cosine Chessboard Manhattan BrayCurtis Canberra>.map({
+    say text-list-plot(k-means(@blackPoints, 7, distance-function => $_), point-char => (1 .. 7)>>.Str, title => $_,
+            width => 76, height => 18), "\n"
 })
 ```
 
@@ -294,13 +316,14 @@ Cluster and plot the clusters using different distance functions:
 [Wk1] Wikipedia entry, ["K-means clustering"](https://en.wikipedia.org/wiki/K-means_clustering).
 
 [AA1] Anton Antonov,
-["Introduction to data wrangling with Raku"](https://rakuforprediction.wordpress.com/2021/12/31/introduction-to-data-wrangling-with-raku/),
+["Introduction to data wrangling with Raku"](https://rakuforprediction.wordpress.com/2021/12/31/introduction-to-data-wrangling-with-raku/)
+,
 (2021),
 [RakuForPrediction at WordPress](https://rakuforprediction.wordpress.com).
 
 [AN1] Amiya Nayak and Ivan Stojmenovic,
-"Handbook of Applied Algorithms: Solving Scientific, Engineering, and Practical Problems", 
-Wiley, 2008. ISBN: 0470044926, 9780470044926.
+"Handbook of Applied Algorithms: Solving Scientific, Engineering, and Practical Problems", Wiley, 2008. ISBN:
+0470044926, 9780470044926.
 
 ### Packages
 
