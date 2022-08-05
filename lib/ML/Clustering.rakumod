@@ -9,7 +9,7 @@ unit module ML::Clustering;
 #------------------------------------------------------------
 #| Find clusters using the K-means algorithm.
 #| C<@points> -- data points.
-#| C<:$k> -- number of clusters.
+#| C<$k> -- number of clusters.
 #| C<:$distance-function> -- points distance function.
 #| C<:$learning-parameter> -- re-assignment learning parameter.
 #| C<:$max-steps> -- maximum number of steps.
@@ -23,7 +23,7 @@ our sub k-means(@points, $k, *%args) is export {
 #------------------------------------------------------------
 #| Find clusters.
 #| C<@points> -- data points.
-#| C<:$k> -- number of clusters.
+#| C<$k> -- number of clusters.
 #| C<:$method> -- method to use, one of Whatever, 'K-means', 'K-medoids', or 'Bi-sectional-k-means'.
 #| C<:$distance-function> -- points distance function.
 #| C<:$learning-parameter> -- re-assignment learning parameter.
