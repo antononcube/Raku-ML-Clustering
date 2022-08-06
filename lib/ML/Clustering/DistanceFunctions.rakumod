@@ -5,6 +5,53 @@ use Data::Reshapers;
 role ML::Clustering::DistanceFunctions {
 
     ##-------------------------------------------------------
+    ## Static member
+    ##-------------------------------------------------------
+    # Here the class distance functions are made to correspond to different specs.
+    # For example for the method bray-curtis-function we have:
+    #   BrayCurtis => 'bray-curtis-distance',
+    #   BrayCurtisDistance => 'bray-curtis-distance',
+    #   braycurtis => 'bray-curtis-distance',
+    #   braycurtisdistance => 'bray-curtis-distance',
+    #   bray-curtis-distance => 'bray-curtis-distance',
+    #   bray-curtis => 'bray-curtis-distance',
+    # The hash is used in method get-distance-function.
+    my %distance-functions =
+            (BrayCurtis => 'bray-curtis-distance',
+             Canberra => 'canberra-distance',
+             Chessboard => 'chessboard-distance',
+             Cosine => 'cosine-distance',
+             Euclidean => 'euclidean-distance',
+             Hamming => 'hamming-distance',
+             Manhattan => 'manhattan-distance',
+             SquaredEuclidean => 'squared-euclidean-distance')
+                    .map({ ($_.key => $_.value,
+                            $_.key ~ 'Distance' => $_.value,
+                            $_.value => $_.value,
+                            $_.value.subst('-distance', '') => $_.value ) }).flat
+            .map({ ($_.key => $_.value,
+                    $_.key.lc => $_.value) }).flat;
+
+    ##-------------------------------------------------------
+    ## Get distance function
+    ##-------------------------------------------------------
+    method known-distance-function-specs(Bool :$short = False ) {
+        if $short {
+            return %distance-functions.keys.grep({ $_ ~~ / .* '-distance' / }).map({ $_.subst('-distance', '') }).unique.sort.List;
+        } else {
+            return %distance-functions.keys.unique.sort.List;
+        }
+    }
+
+    method get-distance-function(Str $spec is copy --> Callable) {
+        if %distance-functions{$spec}:!exists {
+            warn "No distance function for the spec { $spec.raku }.";
+            return WhateverCode;
+        }
+        return self.^lookup(%distance-functions{$spec}).assuming(self);
+    }
+
+    ##-------------------------------------------------------
     ## Arguments check
     ##-------------------------------------------------------
 
@@ -17,12 +64,12 @@ role ML::Clustering::DistanceFunctions {
             return False;
         }
 
-        if ! ( @v1.all ~~ Numeric ) {
+        if !(@v1.all ~~ Numeric) {
             warn 'All elements of the first argument are expected to be numeric';
             return False;
         }
 
-        if ! ( @v2.all ~~ Numeric ) {
+        if !(@v2.all ~~ Numeric) {
             warn 'All elements of the second argument are expected to be numeric';
             return False;
         }
@@ -49,25 +96,6 @@ role ML::Clustering::DistanceFunctions {
     }
 
     ##-------------------------------------------------------
-    ## Distance
-    ##-------------------------------------------------------
-    method distance(Str $spec, @v1, @v2) {
-        given $spec.lc {
-            when $spec ∈ <BrayCurtis BrayCurtisDistance>>>.lc { return self.bray-curtis-distance(@v1, @v2); }
-            when $spec ∈ <Canberra CanberraDistance>>>.lc { return self.canberra-distance(@v1, @v2); }
-            when $spec ∈ <Chessboard ChessboardDistance>>>.lc { return self.chessboard-distance(@v1, @v2); }
-            when $spec ∈ <Cosine CosineDistance>>>.lc { return self.cosine-distance(@v1, @v2); }
-            when $spec ∈ <Euclidean EuclideanDistance>>>.lc { return self.euclidean-distance(@v1, @v2); }
-            when $spec ∈ <Hamming HammingDistance>>>.lc { return self.hamming-distance(@v1, @v2); }
-            when $spec ∈ <Manhattan ManhattanDistance>>>.lc { return self.manhattan-distance(@v1, @v2); }
-            when $spec ∈ <SquaredEuclidean SquaredEuclideanDistance>>>.lc { return self.squared-euclidean-distance(@v1, @v2); }
-            default {
-                die "Do not know how to compute distance named $spec.";
-            }
-        }
-    }
-
-    ##-------------------------------------------------------
     ## Euclidean
     ##-------------------------------------------------------
 
@@ -78,7 +106,7 @@ role ML::Clustering::DistanceFunctions {
         }
 
         # Compute distance
-        return sqrt( [+] (@v1 Z @v2).map({ ($_[0] - $_[1]) ** 2}));
+        return sqrt([+] (@v1 Z @v2).map({ ($_[0] - $_[1]) ** 2 }));
     }
 
     ##-------------------------------------------------------
@@ -92,7 +120,7 @@ role ML::Clustering::DistanceFunctions {
         }
 
         # Compute distance
-        return [+] (@v1 Z @v2).map({ ($_[0] - $_[1]) ** 2});
+        return [+] (@v1 Z @v2).map({ ($_[0] - $_[1]) ** 2 });
     }
 
     ##-------------------------------------------------------
@@ -106,7 +134,7 @@ role ML::Clustering::DistanceFunctions {
         }
 
         # Compute distance
-        return 1.0 - ([+] (@v1 >>*<< @v2) ) / ( self.norm(@v1) * self.norm(@v2) );
+        return 1.0 - ([+] (@v1 >>*<< @v2)) / (self.norm(@v1) * self.norm(@v2));
     }
 
     ##-------------------------------------------------------
