@@ -102,8 +102,7 @@ Here is more interesting looking two-dimensional data, `data2D2`:
 use Data::Reshapers;
 my $pointsPerCluster = 200;
 my @data2D5 = [[10, 20, 4], [20, 60, 6], [40, 10, 6], [-30, 0, 4], [100, 100, 8]].map({
-    random-variate(NormalDistribution.new($_[0], $_[2]), $pointsPerCluster) Z random-variate(NormalDistribution.new(
-            $_[1], $_[2]), $pointsPerCluster)
+    random-variate(NormalDistribution.new($_[0], $_[2]), $pointsPerCluster) Z random-variate(NormalDistribution.new($_[1], $_[2]), $pointsPerCluster)
 }).Array;
 @data2D5 = flatten(@data2D5, max-level => 1).pick(*);
 @data2D5.elems
@@ -142,16 +141,28 @@ process.
 ### Distance function
 
 The value of the argument `distance-function` specifies the distance function to be used -- close points tend to be
-placed in the same cluster. Here is example comparing the "standard" Geometry distance, `euclidean-distance`, with the "
-directional" distance, `cosine-distance`:
+placed in the same cluster. Here is example comparing the "standard" Geometry distance, `euclidean-distance`, with the 
+"directional" distance, `cosine-distance`:
 
-***TBD...***
+```perl6
+use ML::Clustering::DistanceFunctions;
+('custom Euclidean' => -> @v1, @v2 { sqrt([+] (@v1 Z @v2).map({ ($_[0] - $_[1]) ** 2 })) },
+ 'built-in Cosine' => { ML::Clustering::DistanceFunctions.cosine-distance($^a, $^b) })
+        .map({ say find-clusters(@data2D5, 3, distance-function => $_.value).&text-list-plot(
+        title => 'distance function: ' ~ $_.key, point-char => <* ® o>), "\n" });
+```
 
-Instead of distance functions we can use string identifiers of those functions:
+Instead of distance functions (subs) we can use string identifiers of "known functions":
 
 ```perl6
 <Euclidean Cosine>.map({ say find-clusters(@data2D5, 3, distance-function => $_).&text-list-plot(
         title => 'distance function: ' ~ $_, point-char => <* ® o>), "\n" });
+```
+
+Here is a list of identifiers corresponding to "known functions":
+
+```perl6
+say ML::Clustering::DistanceFunctions.known-distance-function-specs():short;
 ```
 
 ### Learning parameter
@@ -175,8 +186,7 @@ if in the number of iterations exceeds m then the algorithms stops. Here is exam
 is obtained with larger max steps:
 
 ```perl6
-(1, 4, 100).map({ say find-clusters(@data2D5, 2, max-steps => $_).&text-list-plot(title => 'maximum steps: ' ~ $_.Str,
-        point-char => <* o>), "\n" });
+(1, 4, 100).map({ say find-clusters(@data2D5, 2, max-steps => $_).&text-list-plot(title => 'maximum steps: ' ~ $_.Str, point-char => <* o>), "\n" });
 ```
 
 ### Minimum reassignments fraction
@@ -199,8 +209,7 @@ cluster finding iterations stop. Here is example that shows using the different 
 
 ```perl6
 srand(1921);
-(0.2, 5).map({ say find-clusters(@data2D5, 2, precision-goal => $_).&text-list-plot(title => 'precision goal: ' ~ $_
-        .Str, point-char => Whatever), "\n" });
+(0.2, 5).map({ say find-clusters(@data2D5, 2, precision-goal => $_).&text-list-plot(title => 'precision goal: ' ~ $_.Str, point-char => Whatever), "\n" });
 ```
 
 -------
@@ -227,8 +236,7 @@ Cluster by body weight only:
 
 ```perl6
 my %awRes1 = find-clusters(@data2D2.map({ [$_<BodyWeight>,] }), 4, prop => 'All');
-.say for %awRes1<IndexClusters>.map({ to-pretty-table(@data2D2[|$_], field-names => <Species BodyWeight BodyWeight>,
-        align => { :Species<l> }) });
+.say for %awRes1<IndexClusters>.map({ to-pretty-table(@data2D2[|$_], field-names => <Species BodyWeight BodyWeight>, align => { :Species<l> }, float-format =>  '10.3f') });
 ```
 
 Note that obtained clusters seem well separated by weight:
@@ -241,10 +249,8 @@ Here we cluster using both body weight and brain weight -- for that combination 
 with Cosine distance:
 
 ```perl6
-my %awRes2 = find-clusters(@data2D2.map({ $_<BodyWeight BrainWeight> }), 4, distance-function => 'Cosine',
-        prop => 'All');
-.say for %awRes2<IndexClusters>.map({ to-pretty-table(@data2D2[|$_], field-names => <Species BodyWeight BodyWeight>,
-        align => { :Species<l> }) });
+my %awRes2 = find-clusters(@data2D2.map({ $_<BodyWeight BrainWeight> }), 4, distance-function => 'Cosine', prop => 'All');
+.say for %awRes2<IndexClusters>.map({ to-pretty-table(@data2D2[|$_], field-names => <Species BodyWeight BodyWeight>, align => { :Species<l> }, float-format =>  '10.3f') });
 ```
 
 Note that obtained clusters seem well separated by body-brain weights directions:
@@ -292,7 +298,10 @@ Cluster and plot the clusters using different distance functions:
 
 ```perl6
 <Euclidean Cosine Chessboard Manhattan BrayCurtis Canberra>.map({
-    say text-list-plot(k-means(@blackPoints, 7, distance-function => $_), point-char => (1 .. 7)>>.Str, title => $_,
+    say text-list-plot(
+            k-means(@blackPoints, 7, distance-function => $_), 
+            point-char => (1 .. 7)>>.Str, 
+            title => $_, 
             width => 76, height => 18), "\n"
 })
 ```
