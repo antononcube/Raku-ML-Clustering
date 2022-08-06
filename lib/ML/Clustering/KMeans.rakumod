@@ -24,13 +24,13 @@ class ML::Clustering::KMeans
         }
 
         # Process options
-        my $knownDistanceFuncs = ("BrayCurtis", "Canberra", "Chessboard", "Cosine", "Euclidean",
-                                  "Hamming", "Manhattan", "SquaredEuclidean");
-        if $distance-function.isa(Whatever) { $distance-function = 'Euclidean' }
-        if !($distance-function ~~ Str && $distance-function.lc ∈ $knownDistanceFuncs>>.lc) {
-            die "The value of the argument distance-function is expected to be Whatever or one of { $knownDistanceFuncs.raku }."
+        if $distance-function.isa(Whatever) || $distance-function.isa(WhateverCode) { $distance-function = 'euclidean-distance' }
+        if !( $distance-function ~~ Callable || $distance-function ~~ Str && $distance-function.lc ∈ self.known-distance-function-specs) {
+            die "The value of the argument distance-function is expected to be Whatever, WhateverCode, a Callable, or one of { self.known-distance-function-specs(:short).raku }."
         }
-        $distance-function = $distance-function.lc;
+        #$distance-function = $distance-function.lc;
+
+        my &distanceFunc = ($distance-function ~~ Callable) ?? $distance-function !! self.get-distance-function($distance-function);
 
         if $max-steps.isa(Whatever) { $max-steps = 100 }
         if !($max-steps ~~ Int && $max-steps ≥ 0) {
@@ -90,7 +90,7 @@ class ML::Clustering::KMeans
             # Compute the distance matrix
             for ^@inputs -> $i {
                 for ^@means.elems -> $c {
-                    $dMat[$i][$c] = self.distance($distance-function, @means[$c], @inputs[$i]);
+                    $dMat[$i][$c] = &distanceFunc(@means[$c], @inputs[$i]);
                 }
             }
 
@@ -99,11 +99,6 @@ class ML::Clustering::KMeans
 
                 @clustersIndexes = do for ^@inputs.elems -> $i {
                     my $j = $dMat[$i].minpairs.head.key;
-#                    say $j;
-#                    say '0: ',  @inputs[$j];
-#                    say '1: ',  @means[$j];
-#                    say '2: ', (@inputs[$i] >>-<< @means[$j]);
-#                    say '3: ', ($learning-parameter <<*<< (@inputs[$i] >>-<< @means[$j]));
                     @means[$j] = @means[$j] >>+<< ($learning-parameter <<*<< (@inputs[$i] >>-<< @means[$j]));
                     $j
                 }
@@ -128,7 +123,7 @@ class ML::Clustering::KMeans
             }
 
             # Displacement of the cluster centers
-            $meansDiff = (@means Z @meansOld).map({ self.distance($distance-function, $_[0], $_[1]) }).sum;
+            $meansDiff = (@means Z @meansOld).map({ &distanceFunc($_[0], $_[1]) }).sum;
         }
 
         my @inputClusterIndexPairs = @clustersIndexes Z=> @inputs;
