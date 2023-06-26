@@ -2,12 +2,12 @@
 use v6.d;
 
 use ML::Clustering::DistanceFunctions;
-use Data::Reshapers::TypeSystem;
+use Data::TypeSystem;
 
 class ML::Clustering::KMeans
         does ML::Clustering::DistanceFunctions {
 
-    my Data::Reshapers::TypeSystem $typeSystem .= new;
+    my Data::TypeSystem::Examiner $typeSystem .= new;
 
     method find-clusters(@inputs,
                          UInt $nSeeds,
