@@ -156,27 +156,10 @@ Detailed parameter explanations and usage examples for the functions provided by
 
 ### UML diagram
 
-Here is a UML diagram that shows package's structure:
+Here is a UML diagram that shows package's structure (in Mermaid-JS):
 
-![](./resources/class-diagram.png)
-
-
-The
-[PlantUML spec](./resources/class-diagram.puml)
-and
-[diagram](./resources/class-diagram.png)
-were obtained with the CLI script `to-uml-spec` of the package "UML::Translators", [AAp6].
-
-Here we get the [PlantUML spec](./resources/class-diagram.puml):
-
-```shell
-to-uml-spec ML::AssociationRuleLearning > ./resources/class-diagram.puml
-```
-
-Here get the [diagram](./resources/class-diagram.png):
-
-```shell
-to-uml-spec ML::Clustering | java -jar ~/PlantUML/plantuml-1.2022.5.jar -pipe > ./resources/class-diagram.png
+```shell, output.prompt=NONE, output.lang=mermaid
+to-uml-spec ML::Clustering --format=mermaid
 ```
 
 **Remark:** Maybe it is a good idea to have an abstract class named, say,
@@ -192,19 +175,19 @@ After thinking over package and function names I will make such a package.
 
 ## TODO
 
-- [ ] Implement Bi-sectional K-means algorithm, [AAp1].
+- [ ] TODO Implement Bi-sectional K-means algorithm, [AAp1].
 
-- [ ] Implement K-medoids algorithm.
+- [ ] TODO Implement K-medoids algorithm.
 
-- [ ] Automatic determination of the number of clusters.
+- [ ] TODO Automatic determination of the number of clusters.
 
-- [ ] Allow data points to be `Pair` objects the keys of which are point labels.
+- [ ] TODO Allow data points to be `Pair` objects the keys of which are point labels.
 
    - Hence, the returned clusters consist of those labels, not points themselves.
 
-- [ ] Implement Agglomerate algorithm.
+- [ ] TODO Implement Agglomerate algorithm.
 
-- [ ] Factor-out the distance functions in a separate package.
+- [ ] TODO Factor-out the distance functions in a separate package.
 
 -------
 
