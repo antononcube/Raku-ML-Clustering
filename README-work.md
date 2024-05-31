@@ -1,6 +1,9 @@
 # Raku ML::Clustering
 
-[![SparkyCI](https://ci.sparrowhub.io/project/gh-antononcube-Raku-ML-Clustering/badge)](https://ci.sparrowhub.io)
+[![MacOS](https://github.com/antononcube/Raku-ML-Clustering/actions/workflows/macos.yml/badge.svg)](https://github.com/antononcube/Raku-ML-Clustering/actions/workflows/macos.yml)
+[![Linux](https://github.com/antononcube/Raku-ML-Clustering/actions/workflows/linux.yml/badge.svg)](https://github.com/antononcube/Raku-ML-Clustering/actions/workflows/linux.yml)
+[![Win64](https://github.com/antononcube/Raku-ML-Clustering/actions/workflows/windows.yml/badge.svg)](https://github.com/antononcube/Raku-ML-Clustering/actions/workflows/windows.yml)
+[![https://raku.land/zef:antononcube/ML::Clustering](https://raku.land/zef:antononcube/ML::Clustering/badges/version)](https://raku.land/zef:antononcube/ML::Clustering)
 [![License: Artistic-2.0](https://img.shields.io/badge/License-Artistic%202.0-0298c3.svg)](https://opensource.org/licenses/Artistic-2.0)
 
 This repository has the code of a Raku package for
@@ -175,6 +178,8 @@ After thinking over package and function names I will make such a package.
 
 ## TODO
 
+- [X] DONE Factor-out the distance functions in a separate package.
+
 - [ ] TODO Implement Bi-sectional K-means algorithm, [AAp1].
 
 - [ ] TODO Implement K-medoids algorithm.
@@ -186,8 +191,6 @@ After thinking over package and function names I will make such a package.
    - Hence, the returned clusters consist of those labels, not points themselves.
 
 - [ ] TODO Implement Agglomerate algorithm.
-
-- [ ] TODO Factor-out the distance functions in a separate package.
 
 -------
 

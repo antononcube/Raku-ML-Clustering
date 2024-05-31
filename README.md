@@ -1,6 +1,9 @@
 # Raku ML::Clustering
 
-[![SparkyCI](https://ci.sparrowhub.io/project/gh-antononcube-Raku-ML-Clustering/badge)](https://ci.sparrowhub.io)
+[![MacOS](https://github.com/antononcube/Raku-ML-Clustering/actions/workflows/macos.yml/badge.svg)](https://github.com/antononcube/Raku-ML-Clustering/actions/workflows/macos.yml)
+[![Linux](https://github.com/antononcube/Raku-ML-Clustering/actions/workflows/linux.yml/badge.svg)](https://github.com/antononcube/Raku-ML-Clustering/actions/workflows/linux.yml)
+[![Win64](https://github.com/antononcube/Raku-ML-Clustering/actions/workflows/windows.yml/badge.svg)](https://github.com/antononcube/Raku-ML-Clustering/actions/workflows/windows.yml)
+[![https://raku.land/zef:antononcube/ML::Clustering](https://raku.land/zef:antononcube/ML::Clustering/badges/version)](https://raku.land/zef:antononcube/ML::Clustering)
 [![License: Artistic-2.0](https://img.shields.io/badge/License-Artistic%202.0-0298c3.svg)](https://opensource.org/licenses/Artistic-2.0)
 
 This repository has the code of a Raku package for
@@ -64,14 +67,14 @@ records-summary(@data3)
 ```
 ```
 # +------------------------------+------------------------------+
-# | 1                            | 0                            |
+# | 0                            | 1                            |
 # +------------------------------+------------------------------+
-# | Min    => 2.7347892318441853 | Min    => 2.7829663051730122 |
-# | 1st-Qu => 5.445914950285739  | 1st-Qu => 5.716040979452782  |
-# | Mean   => 8.176626293030205  | Mean   => 8.004271747317972  |
-# | Median => 9.3706132234432    | Median => 9.16395316329162   |
-# | 3rd-Qu => 10.268064211087841 | 3rd-Qu => 9.984928094440164  |
-# | Max    => 11.483204195155919 | Max    => 12.467908322582032 |
+# | Min    => 1.9418286393831807 | Min    => 2.5537453527288423 |
+# | 1st-Qu => 5.23355791998377   | 1st-Qu => 5.802659698503382  |
+# | Mean   => 7.812329106122415  | Mean   => 8.221053043444616  |
+# | Median => 8.529233471757092  | Median => 8.859544342245552  |
+# | 3rd-Qu => 9.74722507929462   | 3rd-Qu => 10.392817343154189 |
+# | Max    => 12.161509848446896 | Max    => 11.851232468041157 |
 # +------------------------------+------------------------------+
 ```
 
@@ -82,22 +85,22 @@ use Text::Plot;
 text-list-plot(@data3)
 ```
 ```
-# +---------+----------+---------+----------+----------+-----+       
+# +---+---------+---------+---------+---------+---------+----+       
 # +                                                          +  12.00
-# |                               *  *  **  * * *     *      |       
-# +                                     *** ** *    *        +  10.00
-# |                           *      ****  ****          *   |       
-# |                                *       *    *   *        |       
-# +                  **              *  *   *                +   8.00
-# |      *     * *   * *                                     |       
-# +   *                                                      +   6.00
-# |          *       * *                                     |       
-# |   *   ** *    * ** **     *                              |       
-# +                 ** *             *                       +   4.00
-# |       *   *      *                                       |       
+# |                                    *  *  *        *      |       
+# |                                 ****  * ** **   ***      |       
+# +                                   * *   ** **        *   +  10.00
+# |                                   *   ****   **          |       
+# +                                  *    *  *        *      +   8.00
+# |      *       *         *                                 |       
+# +      *   *        *   **                                 +   6.00
+# |          * ** ****    *         *                        |       
+# |   *          *  *    *                                   |       
+# +             **   **        *                             +   4.00
+# |         *                 *                              |       
 # +                                                          +   2.00
-# +---------+----------+---------+----------+----------+-----+       
-#           4.00       6.00      8.00       10.00      12.00
+# +---+---------+---------+---------+---------+---------+----+       
+#     2.00      4.00      6.00      8.00      10.00     12.00
 ```
 
 **Problem:** Group the points in such a way that each group has close (or similar) points.
@@ -126,8 +129,8 @@ Here are sample points from each found cluster:
 .say for %res<Clusters>>>.pick(3);
 ```
 ```
-# ((6.119787650922214 4.3460991143937155) (2.8184813681006387 6.194455975464421) (4.146182920737956 4.48149915185223))
-# ((10.148258671995263 10.421539222116792) (9.984928094440164 9.485326329189661) (9.269111577015677 10.129398397646888))
+# ((6.8442730684339805 2.5537453527288423) (5.988371242806578 6.690825577391333) (3.9052242620581974 5.826205768330279))
+# ((10.302490764954882 10.91125277165973) (8.821337333605817 9.715938302825638) (8.278089768928224 8.666124184959127))
 ```
 
 Here are the centers of the clusters (the mean points):
@@ -136,7 +139,7 @@ Here are the centers of the clusters (the mean points):
 %res<MeanPoints>
 ```
 ```
-# [(5.686348428932858 5.660945893906989) (9.795457276967502 10.100628996937822)]
+# [(4.693753655533249 4.977193937166397) (9.411502770521118 9.768925531106525)]
 ```
 
 We can verify the result by looking at the plot of the found clusters:
@@ -146,22 +149,22 @@ text-list-plot((|%res<Clusters>, %res<MeanPoints>), point-char => <▽ ☐ ●>,
 ```
 ```
 # ▽ - 1st cluster; ☐ - 2nd cluster; ● - cluster centers    
-# +--------+-----------+----------+----------+----------+----+       
-# +                               ☐                          +  12.00
-# |                                  ☐  ☐☐  ☐☐☐☐ ☐     ☐     |       
-# +                            ☐     ☐☐  ☐☐☐●☐☐☐☐    ☐     ☐ +  10.00
-# |                                 ☐☐  ☐☐ ☐ ☐               |       
-# |                                 ☐      ☐     ☐   ☐       |       
-# +                  ▽               ☐   ☐   ☐               +   8.00
-# |     ▽     ▽  ▽   ▽ ▽                                     |       
-# +  ▽                                                       +   6.00
-# |          ▽       ● ▽                                     |       
-# |      ▽  ▽     ▽▽ ▽        ▽                              |       
-# +  ▽    ▽        ▽ ▽ ▽▽            ▽                       +   4.00
-# |           ▽      ▽                                       |       
-# |      ▽                                                   |       
-# +--------+-----------+----------+----------+----------+----+       
-#          4.00        6.00       8.00       10.00      12.00
+# +--+----------+---------+----------+---------+----------+--+       
+# +                                     ☐                    +  12.00
+# |                                   ☐    ☐ ☐☐ ☐☐    ☐ ☐    |       
+# |                                 ☐ ☐☐☐    ☐☐ ☐    ☐  ☐    |       
+# +                                   ☐☐ ☐  ●☐☐ ☐☐         ☐ +  10.00
+# |                                   ☐    ☐☐ ☐   ☐☐         |       
+# +              ▽                    ☐    ☐  ☐        ☐     +   8.00
+# |     ▽                  ▽                                 |       
+# +     ▽   ▽         ▽   ▽▽                                 +   6.00
+# |         ▽ ▽▽ ▽ ▽▽     ▽          ▽                       |       
+# |  ▽           ▽ ●▽    ▽                                   |       
+# +            ▽ ▽  ▽ ▽         ▽                            +   4.00
+# |                                                          |       
+# +        ▽                   ▽                             +   2.00
+# +--+----------+---------+----------+---------+----------+--+       
+#    2.00       4.00      6.00       8.00      10.00      12.00
 ```
 
 **Remark:** By default `find-clusters` uses the K-means algorithm. The functions `k-means` and `k-medoids`
@@ -192,22 +195,22 @@ Here is a plot of that data:
 text-list-plot(@data2D5)
 ```
 ```
-# +---------------+---------------+----------------+---------+        
+# +---------------+---------------+---------------+----------+        
 # |                                                          |        
 # |                                            ***** ***     |        
-# +                                       ****************   +  100.00
-# |                                        * ************    |        
-# |                      *                       ** **       |        
-# |                  *********                               |        
-# |                ************                              |        
-# +                  *****  **                               +   50.00
-# |                * ***                                     |        
-# |               ******** ******** *                        |        
-# |   *******       ****   ********** *                      |        
-# +   ******              *  *****                           +    0.00
+# +                                        ***************   +  100.00
+# |                                         **************   |        
+# |                    * *  *                   ***          |        
+# |                 ***********                              |        
+# +                 ***********                              +   50.00
+# |                  ***  * *                                |        
+# |                 *****                                    |        
+# |               *******  *********                         |        
+# |   *******       **** * **********                        |        
+# +   *******            *  ** ***                           +    0.00
 # |                                                          |        
-# +---------------+---------------+----------------+---------+        
-#                 0.00            50.00            100.00
+# +---------------+---------------+---------------+----------+        
+#                 0.00            50.00           100.00
 ```
 
 Here we find clusters and plot them together with their mean points:
@@ -218,22 +221,22 @@ my %clRes = find-clusters(@data2D5, 5, prop=>'All');
 text-list-plot([|%clRes<Clusters>, %clRes<MeanPoints>], point-char=><1 2 3 4 5 ●>)
 ```
 ```
-# +--------------+----------------+-----------------+--------+        
-# +                                             2 2          +  120.00
-# |                                             2222222222   |        
-# +                                       2 2 222222●2222222 +  100.00
-# |                                         2 22222222222 2  |        
-# +                     1                          2  2      +   80.00
-# |                 111111111                                |        
-# +              1 11111●111111                              +   60.00
-# |                 11111  11                                |        
-# +                  33                                      +   40.00
-# +              33333333 3 3 33333                          +   20.00
-# |4  55  5      3 333333●33333333333 3                      |        
-# + 4●55●55               33333333 3                         +    0.00
-# | 444555                    33                             |        
-# +--------------+----------------+-----------------+--------+        
-#                0.00             50.00             100.00
+# +--------------+-----------------+----------------+--------+        
+# +                                             3   33       +  120.00
+# |                                            3 33333 5555  |        
+# +                                         333333●355●55555 +  100.00
+# |                                            3335555555555 |        
+# +                   1 11  1                                +   80.00
+# |                111111111 11                              |        
+# +                11111●111111                              +   60.00
+# +                 1 11 11 1                                +   40.00
+# |               2 2                                        |        
+# +              22222222 22 222222                          +   20.00
+# | 444444        2222222 ●2222222222                        |        
+# +4444●444              2  222222222                        +    0.00
+# | 44444 4                    2                             |        
+# +--------------+-----------------+----------------+--------+        
+#                0.00              50.00            100.00
 ```
 
 -------
@@ -261,30 +264,6 @@ to-uml-spec ML::Clustering --format=mermaid
 ```
 ```mermaid
 classDiagram
-class find_clusters {
-  <<routine>>
-}
-find_clusters --|> Routine
-find_clusters --|> Block
-find_clusters --|> Code
-find_clusters --|> Callable
-
-
-class ML_Clustering_DistanceFunctions {
-  <<role>>
-  +args-check()
-  +bray-curtis-distance()
-  +canberra-distance()
-  +chessboard-distance()
-  +cosine-distance()
-  +euclidean-distance()
-  +get-distance-function()
-  +known-distance-function-specs()
-  +manhattan-distance()
-  +squared-euclidean-distance()
-}
-
-
 class k_means {
   <<routine>>
 }
@@ -292,6 +271,15 @@ k_means --|> Routine
 k_means --|> Block
 k_means --|> Code
 k_means --|> Callable
+
+
+class find_clusters {
+  <<routine>>
+}
+find_clusters --|> Routine
+find_clusters --|> Block
+find_clusters --|> Code
+find_clusters --|> Callable
 
 
 class ML_Clustering_KMeans {
@@ -310,7 +298,7 @@ class ML_Clustering_KMeans {
   +norm()
   +squared-euclidean-distance()
 }
-ML_Clustering_KMeans --|> ML_Clustering_DistanceFunctions
+ML_Clustering_KMeans --|> Math_DistanceFunctionish
 ```
 
 **Remark:** Maybe it is a good idea to have an abstract class named, say,
@@ -326,6 +314,8 @@ After thinking over package and function names I will make such a package.
 
 ## TODO
 
+- [X] DONE Factor-out the distance functions in a separate package.
+
 - [ ] TODO Implement Bi-sectional K-means algorithm, [AAp1].
 
 - [ ] TODO Implement K-medoids algorithm.
@@ -337,8 +327,6 @@ After thinking over package and function names I will make such a package.
    - Hence, the returned clusters consist of those labels, not points themselves.
 
 - [ ] TODO Implement Agglomerate algorithm.
-
-- [ ] TODO Factor-out the distance functions in a separate package.
 
 -------
 

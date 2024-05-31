@@ -1,13 +1,14 @@
 {
   "name": "ML::Clustering",
-  "description": "Package for clustering algorithms",
-  "version": "0.1.5",
+  "description": "Raku package for machine learning clustering algorithms",
+  "version": "0.2.0",
   "perl": "6.d",
   "authors": [
     "Anton Antonov"
   ],
   "auth": "zef:antononcube",
   "depends": [
+    "Math::DistanceFunctions:auth<zef:antononcube>:ver<0.1.0+>",
     "Data::TypeSystem:auth<zef:antononcube>:ver<0.1.5+>"
   ],
   "build-depends": [],
@@ -16,7 +17,6 @@
   ],
   "provides": {
     "ML::Clustering": "lib/ML/Clustering.rakumod",
-    "ML::Clustering::DistanceFunctions": "lib/ML/Clustering/DistanceFunctions.rakumod",
     "ML::Clustering::KMeans": "lib/ML/Clustering/KMeans.rakumod"
   },
   "resources": [

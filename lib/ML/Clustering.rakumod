@@ -1,10 +1,10 @@
 #!/usr/bin/env raku
 use v6.d;
 
-use ML::Clustering::DistanceFunctions;
+unit module ML::Clustering;
+
 use ML::Clustering::KMeans;
 
-unit module ML::Clustering;
 
 #------------------------------------------------------------
 #| Find clusters using the K-means algorithm.

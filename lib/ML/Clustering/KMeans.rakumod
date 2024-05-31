@@ -1,11 +1,11 @@
 #!/usr/bin/env raku
 use v6.d;
 
-use ML::Clustering::DistanceFunctions;
+use Math::DistanceFunctionish;
 use Data::TypeSystem;
 
 class ML::Clustering::KMeans
-        does ML::Clustering::DistanceFunctions {
+        does Math::DistanceFunctionish {
 
     my Data::TypeSystem::Examiner $typeSystem .= new;
 
