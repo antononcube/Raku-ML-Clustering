@@ -8,7 +8,7 @@
   ],
   "auth": "zef:antononcube",
   "depends": [
-    "Math::DistanceFunctions:auth<zef:antononcube>:ver<0.1.0+>",
+    "Math::DistanceFunctions:auth<zef:antononcube>:ver<0.1.1+>",
     "Data::TypeSystem:auth<zef:antononcube>:ver<0.1.5+>"
   ],
   "build-depends": [],
